@@ -1,55 +1,162 @@
---------------------------------------------------
+==================================================
 Model 'Random Forest', Grid 0
 --------------------------------------------------
-Model       1 >>  Score: 0.845 (+/-0.257 95% CI) | Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'gini'}
-Model min-  2 >>  Score: 0.676 (+/-0.077 95% CI) | Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'entropy'}
-Model       3 >>  Score: 0.943 (+/-0.149 95% CI) | Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'gini'}
-Model       4 >>  Score: 0.935 (+/-0.160 95% CI) | Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'entropy'}
-Model       5 >>  Score: 0.887 (+/-0.228 95% CI) | Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'gini'}
-Model       6 >>  Score: 0.740 (+/-0.190 95% CI) | Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'entropy'}
-Model max+  7 >>  Score: 0.944 (+/-0.126 95% CI) | Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'gini'}
-Model       8 >>  Score: 0.935 (+/-0.160 95% CI) | Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'entropy'}
+Model 1
+    Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'gini'}
+    Score: 0.845 (+/-0.257 95% CI)
 
---------------------------------------------------
+Model 2 [----]
+    Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'entropy'}
+    Score: 0.676 (+/-0.077 95% CI) 
+
+Model 3
+    Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'gini'}
+    Score: 0.943 (+/-0.149 95% CI)
+
+Model 4
+    Parameters: {'n_estimators': 10, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'entropy'}
+    Score: 0.935 (+/-0.160 95% CI)
+
+Model 5
+    Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'gini'}
+    Score: 0.887 (+/-0.228 95% CI)
+
+Model 6
+    Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 1, 'criterion': 'entropy'}
+    Score: 0.740 (+/-0.190 95% CI)
+
+Model 7 [++++]
+    Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'gini'}
+    Score: 0.944 (+/-0.126 95% CI)
+
+Model 8
+    Parameters: {'n_estimators': 100, 'max_features': 'auto', 'max_depth': 5, 'criterion': 'entropy'}
+    Score: 0.935 (+/-0.160 95% CI)
+
+==================================================
+==================================================
 Model 'SVM', Grid 0
 --------------------------------------------------
-Model       1 >>  Score: 0.926 (+/-0.203 95% CI) | Parameters: {'C': 0.01, 'kernel': 'linear'}
-Model       2 >>  Score: 0.935 (+/-0.177 95% CI) | Parameters: {'C': 0.01, 'kernel': 'poly'}
-Model       3 >>  Score: 0.943 (+/-0.149 95% CI) | Parameters: {'C': 0.1, 'kernel': 'linear'}
-Model       4 >>  Score: 0.960 (+/-0.105 95% CI) | Parameters: {'C': 0.1, 'kernel': 'poly'}
-Model max+  5 >>  Score: 0.968 (+/-0.108 95% CI) | Parameters: {'C': 1, 'kernel': 'linear'}
-Model max+  6 >>  Score: 0.968 (+/-0.079 95% CI) | Parameters: {'C': 1, 'kernel': 'poly'}
-Model       7 >>  Score: 0.952 (+/-0.128 95% CI) | Parameters: {'C': 10, 'kernel': 'linear'}
-Model       8 >>  Score: 0.960 (+/-0.110 95% CI) | Parameters: {'C': 10, 'kernel': 'poly'}
+Model 1
+    Parameters: {'C': 0.01, 'kernel': 'linear'}
+    Score: 0.926 (+/-0.203 95% CI)
 
---------------------------------------------------
+Model 2
+    Parameters: {'C': 0.01, 'kernel': 'poly'}
+    Score: 0.935 (+/-0.177 95% CI)
+
+Model 3
+    Parameters: {'C': 0.1, 'kernel': 'linear'}
+    Score: 0.943 (+/-0.149 95% CI)
+
+Model 4
+    Parameters: {'C': 0.1, 'kernel': 'poly'}
+    Score: 0.960 (+/-0.105 95% CI)
+
+Model 5 [++++]
+    Parameters: {'C': 1, 'kernel': 'linear'}
+    Score: 0.968 (+/-0.108 95% CI)
+
+Model 6 [++++]
+    Parameters: {'C': 1, 'kernel': 'poly'}
+    Score: 0.968 (+/-0.079 95% CI)
+
+Model 7
+    Parameters: {'C': 10, 'kernel': 'linear'}
+    Score: 0.952 (+/-0.128 95% CI)
+
+Model 8
+    Parameters: {'C': 10, 'kernel': 'poly'}
+    Score: 0.960 (+/-0.110 95% CI)
+
+==================================================
 Model 'SVM', Grid 1
 --------------------------------------------------
-Model min-  1 >>  Score: 0.350 (+/-0.042 95% CI) | Parameters: {'C': 0.01, 'gamma': 0.0001, 'kernel': 'rbf'}
-Model min-  2 >>  Score: 0.350 (+/-0.042 95% CI) | Parameters: {'C': 0.01, 'gamma': 0.001, 'kernel': 'rbf'}
-Model min-  3 >>  Score: 0.350 (+/-0.042 95% CI) | Parameters: {'C': 0.01, 'gamma': 0.01, 'kernel': 'rbf'}
-Model min-  4 >>  Score: 0.350 (+/-0.042 95% CI) | Parameters: {'C': 0.01, 'gamma': 1, 'kernel': 'rbf'}
-Model min-  5 >>  Score: 0.350 (+/-0.042 95% CI) | Parameters: {'C': 0.1, 'gamma': 0.0001, 'kernel': 'rbf'}
-Model min-  6 >>  Score: 0.350 (+/-0.042 95% CI) | Parameters: {'C': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
-Model       7 >>  Score: 0.684 (+/-0.048 95% CI) | Parameters: {'C': 0.1, 'gamma': 0.01, 'kernel': 'rbf'}
-Model       8 >>  Score: 0.935 (+/-0.163 95% CI) | Parameters: {'C': 0.1, 'gamma': 1, 'kernel': 'rbf'}
-Model min-  9 >>  Score: 0.350 (+/-0.042 95% CI) | Parameters: {'C': 1, 'gamma': 0.0001, 'kernel': 'rbf'}
-Model       10 >>  Score: 0.684 (+/-0.048 95% CI) | Parameters: {'C': 1, 'gamma': 0.001, 'kernel': 'rbf'}
-Model       11 >>  Score: 0.918 (+/-0.183 95% CI) | Parameters: {'C': 1, 'gamma': 0.01, 'kernel': 'rbf'}
-Model       12 >>  Score: 0.935 (+/-0.177 95% CI) | Parameters: {'C': 1, 'gamma': 1, 'kernel': 'rbf'}
-Model       13 >>  Score: 0.684 (+/-0.048 95% CI) | Parameters: {'C': 10, 'gamma': 0.0001, 'kernel': 'rbf'}
-Model       14 >>  Score: 0.917 (+/-0.149 95% CI) | Parameters: {'C': 10, 'gamma': 0.001, 'kernel': 'rbf'}
-Model       15 >>  Score: 0.951 (+/-0.152 95% CI) | Parameters: {'C': 10, 'gamma': 0.01, 'kernel': 'rbf'}
-Model       16 >>  Score: 0.927 (+/-0.171 95% CI) | Parameters: {'C': 10, 'gamma': 1, 'kernel': 'rbf'}
+Model 1 [----]
+    Parameters: {'C': 0.01, 'gamma': 0.0001, 'kernel': 'rbf'}
+    Score: 0.350 (+/-0.042 95% CI) 
 
---------------------------------------------------
+Model 2 [----]
+    Parameters: {'C': 0.01, 'gamma': 0.001, 'kernel': 'rbf'}
+    Score: 0.350 (+/-0.042 95% CI) 
+
+Model 3 [----]
+    Parameters: {'C': 0.01, 'gamma': 0.01, 'kernel': 'rbf'}
+    Score: 0.350 (+/-0.042 95% CI) 
+
+Model 4 [----]
+    Parameters: {'C': 0.01, 'gamma': 1, 'kernel': 'rbf'}
+    Score: 0.350 (+/-0.042 95% CI) 
+
+Model 5 [----]
+    Parameters: {'C': 0.1, 'gamma': 0.0001, 'kernel': 'rbf'}
+    Score: 0.350 (+/-0.042 95% CI) 
+
+Model 6 [----]
+    Parameters: {'C': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+    Score: 0.350 (+/-0.042 95% CI) 
+
+Model 7
+    Parameters: {'C': 0.1, 'gamma': 0.01, 'kernel': 'rbf'}
+    Score: 0.684 (+/-0.048 95% CI)
+
+Model 8
+    Parameters: {'C': 0.1, 'gamma': 1, 'kernel': 'rbf'}
+    Score: 0.935 (+/-0.163 95% CI)
+
+Model 9 [----]
+    Parameters: {'C': 1, 'gamma': 0.0001, 'kernel': 'rbf'}
+    Score: 0.350 (+/-0.042 95% CI) 
+
+Model 10
+    Parameters: {'C': 1, 'gamma': 0.001, 'kernel': 'rbf'}
+    Score: 0.684 (+/-0.048 95% CI)
+
+Model 11
+    Parameters: {'C': 1, 'gamma': 0.01, 'kernel': 'rbf'}
+    Score: 0.918 (+/-0.183 95% CI)
+
+Model 12
+    Parameters: {'C': 1, 'gamma': 1, 'kernel': 'rbf'}
+    Score: 0.935 (+/-0.177 95% CI)
+
+Model 13
+    Parameters: {'C': 10, 'gamma': 0.0001, 'kernel': 'rbf'}
+    Score: 0.684 (+/-0.048 95% CI)
+
+Model 14
+    Parameters: {'C': 10, 'gamma': 0.001, 'kernel': 'rbf'}
+    Score: 0.917 (+/-0.149 95% CI)
+
+Model 15
+    Parameters: {'C': 10, 'gamma': 0.01, 'kernel': 'rbf'}
+    Score: 0.951 (+/-0.152 95% CI)
+
+Model 16
+    Parameters: {'C': 10, 'gamma': 1, 'kernel': 'rbf'}
+    Score: 0.927 (+/-0.171 95% CI)
+
+==================================================
+==================================================
 Model 'Logistic Regression', Grid 0
 --------------------------------------------------
-Model min-  1 >>  Score: 0.958 (+/-0.084 95% CI) | Parameters: {'C': 1, 'max_iter': 500, 'penalty': 'l2'}
-Model min-  2 >>  Score: 0.958 (+/-0.084 95% CI) | Parameters: {'C': 1, 'max_iter': 1000, 'penalty': 'l2'}
-Model max+  3 >>  Score: 0.968 (+/-0.105 95% CI) | Parameters: {'C': 10, 'max_iter': 500, 'penalty': 'l2'}
-Model max+  4 >>  Score: 0.968 (+/-0.105 95% CI) | Parameters: {'C': 10, 'max_iter': 1000, 'penalty': 'l2'}
+Model 1 [----]
+    Parameters: {'C': 1, 'max_iter': 500, 'penalty': 'l2'}
+    Score: 0.958 (+/-0.084 95% CI) 
 
+Model 2 [----]
+    Parameters: {'C': 1, 'max_iter': 1000, 'penalty': 'l2'}
+    Score: 0.958 (+/-0.084 95% CI) 
+
+Model 3 [++++]
+    Parameters: {'C': 10, 'max_iter': 500, 'penalty': 'l2'}
+    Score: 0.968 (+/-0.105 95% CI)
+
+Model 4 [++++]
+    Parameters: {'C': 10, 'max_iter': 1000, 'penalty': 'l2'}
+    Score: 0.968 (+/-0.105 95% CI)
+
+==================================================
 --------------------------------------------------
 Max Model 'SVM'
 'SVC(C=1, cache_size=200, class_weight=None, coef0=0.0,
@@ -64,4 +171,3 @@ Min Model 'SVM'
     tol=0.001, verbose=False)'
  Score 0.3496503496503497
 --------------------------------------------------
-See `plots/` for visualizations.

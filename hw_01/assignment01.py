@@ -1,4 +1,5 @@
 
+import os
 import sys
 import json
 import statistics
@@ -14,81 +15,134 @@ from models.classifiers import svm, rf, logReg
 from models.grids import Grid, GridSearch, loadGrid
 
 simplefilter(action='ignore', category=FutureWarning)
+simplefilter(action='ignore', lineno=1544)
+
+output_path = "{}/outputs/".format(os.path.dirname(os.path.abspath(__file__)))
+
+text = f'# 1. write a function to take a list or dictionary of clfs and hypers ie use\n\
+#    logistic regression, each with 3 different sets of hyper parameters for\n\
+#    each\n\
+# 2. expand to include larger number of classifiers and hyperparmater settings\n\
+# 3. find some simple data\n\
+# 4. generate matplotlib plots that will assist in identifying the optimal clf\n\
+#    and parampters settings\n\
+# 5. Please set up your code to be run and save the results to the directory\n\
+#    that its executed from\n\
+# 6. Collaborate to get things\n\
+# 7. Investigate grid search function'
 
 
-# 1. write a function to take a list or dictionary of clfs and hypers ie use
-#    logistic regression, each with 3 different sets of hyper parameters for
-#    each
-# 2. expand to include larger number of classifiers and hyperparmater settings
-# 3. find some simple data
-# 4. generate matplotlib plots that will assist in identifying the optimal clf
-#    and parampters settings
-# 5. Please set up your code to be run and save the results to the directory
-#    that its executed from
-# 6. Collaborate to get things
-# 7. Investigate grid search function
+def part_one(grids):
+    return GridSearch(grids)
 
 
-
-def testClassifiers():
+def part_three():
     iris = datasets.load_iris()
     X = iris.data
     y = iris.target
     n_folds = 5
-    n_splits, random_state = 10,101
+    n_splits, random_state = 10, 101
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
-                                                        random_state=101)
-    
-    rf_Grid = Grid(rf(), 
+                                                        random_state=random_state)
+
+    return dict(X=X_train, y=y_train, n_splits=n_splits, random_state=random_state)
+
+
+def part_four(gs, data):
+    try:
+        print('*'*20+'\nLOADING STORED MODEL\nTo start fresh move or delete existing pt5.pickle\n'+'*'*20)
+        gs = loadGrid(output_path+'pt5.pickle')
+    except:
+        gs.run(**data)
+
+    gs.vizualizeAll(saveFigsPath=output_path)
+    return gs
+
+
+def part_five(gs):
+    gs.save(path=output_path+'pt5.pickle')
+    print('GridSearch Object saved at :\n{}'.format(output_path+'pt5.pickle'))
+    # gs.pprint(outputPath=output_path+'pt5.txt')
+
+
+def part_six_seven(gs):
+    gs.pprint(outputPath=output_path+'pt6-7.txt')
+
+
+def main():
+    import inspect
+    logReg_Grid1 = Grid(
+        logReg(),
+        grid_opts=[{'C': [0.1, 1, 10],
+                    'max_iter': [100, 500, 1000],
+                    'penalty': ['l2']}])
+
+    rf_Grid = Grid(
+        rf(),
         grid_opts=[{'n_estimators': [10, 100],
-        'max_features': ['auto'],
-        'max_depth': [1,5],
-        'criterion':['gini', 'entropy']}])
-    
-    svm_Grid = Grid(svm(), 
+                    'max_features': ['auto'],
+                    'max_depth': [1, 5],
+                    'criterion':['gini', 'entropy']}])
+
+    svm_Grid = Grid(
+        svm(),
         grid_opts=[{
-        'C': [0.01, 0.1, 1, 10],
-        'kernel': ['linear','poly']
-        },{
+            'C': [0.01, 0.1, 1, 10],
+            'kernel': ['linear', 'poly']
+        }, {
             'C': [0.01, 0.1, 1, 10],
             'gamma': [0.0001, 0.001, 0.01, 1],
             'kernel': ['rbf']
-            }])
+        }])
 
-    logReg_Grid = Grid(logReg(), 
-        grid_opts=[{'C': [1, 10],
-        'max_iter': [500, 1000],
-        'penalty': ['l2']}])
+    logReg_Grid = Grid(
+        logReg(),
+        grid_opts=[{'C': [0.1, 1, 10],
+                    'max_iter': [100, 500, 1000],
+                    'penalty': ['l2']}])
 
-    grids = {
+    grids1 = {
+        'logReg': logReg_Grid1
+    }
+    
+    grids2 = {
         'rf': rf_Grid,
         'svm': svm_Grid,
         'logReg': logReg_Grid
     }
-    
+    resp = {}
+    parts = dict(
+        pt1=(part_one, grids1),
+        pt2=(part_one, grids2),
+        pt3=(part_three, False),
+        pt4=(part_four, ['pt2', 'pt3']),
+        pt5=(part_five, 'pt4'),
+        pt67=(part_six_seven, 'pt4')
+    )
 
-    gs = GridSearch(grids,X_train, y_train, n_splits, random_state)
-    gs.run()
-    gs.save()
-    return gs
+    print(text)
 
-def testLoad():
-    gs = loadGrid()
-    return gs
+    for idx, (key, (pt, opts)) in enumerate(parts.items()):
+
+        part_str = '#'*25+'\n# Part {}\n'.format(idx+1)+'#'*25
+        print(part_str, '\n')
+        if not opts:
+            resp[key] = pt()
+        elif type(opts) == str:
+            opts = resp[opts]
+            resp[key] = pt(opts)
+        elif type(opts) == list:
+            newOpts = []
+            for opt in opts:
+                if type(opt) == str:
+                    newOpts.append(resp[opt])
+                else:
+                    pass
+            resp[key] = pt(*newOpts)
+        else:
+            resp[key] = pt(opts)
+        print('Code Preview:', inspect.getsource(pt), sep='\n')
 
 if __name__ == "__main__":
-    print("#"*25,'  Starting Classifier Optimization...', "#"*25, sep='\n', end='\n')
-    # gs = testClassifiers()
-    gs = testLoad()
-
-    
-    gs.vizualizeAll()
-    orig_stdout = sys.stdout
-    f = open('out.txt', 'w')
-    sys.stdout = f
-    gs.pprint()
-    print("See `plots/` for visualizations.")
-    sys.stdout = orig_stdout
-    f.close()
-    
+    main()
