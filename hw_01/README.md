@@ -45,9 +45,11 @@ a mental map of all skleanr configs.
 `assignment01.py` utlizes our model modules to satisfy [Steps 1-7 (described above)](#Description). Given that some of the steps are more openended, some steps are combined while others were
 repurposed to demonstrate different aspects of functionality.
 
-```bash
-python assignment01.py
+```sh
+#From the main directory level
+~/path/to/ML_2 $ python -m hw_01.assignment01
 ```
+
 Will take you through the defined "steps" of the demonstration. As the steps are executed,
 progress is written out to the `std.out`. More verbose results/summarys are written to output
 files located in `outputs/`. Visualizations and serialized model objects can also be located
