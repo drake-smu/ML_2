@@ -9,11 +9,50 @@ import pickle
 import matplotlib.pyplot as plt
 
 class Grid:
+    """
+    A class used to train an analyze a given modal over 
+    a specified hyperparameters.
+    ...
+
+    Attributes
+    ----------
+    model : Object
+        model is a model object from the wrapper module `models`
+    grid_opts : list
+        grid_opts are a list (or dict) of hyperparamter options. 
+        the options are used to generate all possible permutations.
+        Multiple options can be used to cut down on total hyper params 
+        tested.
+    gridSets : dict
+        gridSets contains the results for each gridSet. A grid set is 
+        built using a single grid_option element and contains all 
+        associated hyperparams for that set.
+    num_legs : int
+        the number of legs the animal has (default 4)
+    max_model : object
+        contains the model object for the model configuration 
+        that scored highest on accuracy
+    max_score : float
+        the mean accuracy score of the max_model
+    min_model : object
+        same as max but for the worst performing model
+    min_score : float
+        the mean accuracy score of the min_model
+
+    Methods
+    -------
+    says(sound=None)
+        Prints the animals name and what sound it makes
+    """
     def __init__(self, model, grid_opts:list):
         self.model = model
         self.grid_opts = []
         self.__hyper_sets = {}
         self.gridSets = {}
+        self.max_model = None
+        self.max_score = -1000
+        self.min_model = None
+        self.min_score = 1000
         if type(grid_opts)==list:
             self.grid_opts = grid_opts
         elif type(grid_opts)==dict:
@@ -45,10 +84,6 @@ class Grid:
     
     def train(self, X, y, n_splits, random_state):
         self.__pre()
-        self.max_model = None
-        self.max_score = -1000
-        self.min_model = None
-        self.min_score = 1000
         for (i,gridSet) in self.gridSets.items():
             self.gridSets[i]['results'] = []
             for hypers in gridSet['hypers']:
