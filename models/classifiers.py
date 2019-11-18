@@ -6,10 +6,12 @@ from pprint import pprint
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB as gnb
+from sklearn.neighbors import KNeighborsClassifier
 
 from sklearn.model_selection import KFold
-from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score
 from sklearn.base import clone
 
 
@@ -40,21 +42,30 @@ class classifier:
             evaluation. Each fold result contains the model, training_index,
             test_index, and accuracy score.
         """
+        X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.33, 
+        random_state=random_state)
+
         kf = StratifiedKFold(n_splits=n_splits, shuffle=True,
                              random_state=random_state)
         resp = {}
-        for idx, (train_index, test_index) in enumerate(kf.split(X, y)):
+        resp['folds'] = {}
+        for idx, (train_index, test_index) in enumerate(kf.split(X_train, y_train)):
             model = clone(self.model)
             model.set_params(**hypers)
-            model.fit(X[train_index], y[train_index])
-            pred = model.predict(X[test_index])
-            score = accuracy_score(y[test_index], pred)
+            model.fit(X_train[train_index], y_train[train_index])
+            pred = model.predict(X_train[test_index])
+            score = accuracy_score(y_train[test_index], pred)
+            
 
             sample_name = 'fold_' + str(idx)
-            resp[sample_name] = {'model': model,
+            resp['folds'][sample_name] = {'model': model,
                                  'train_index': train_index,
                                  'test_index': test_index,
-                                 'score': score}
+                                 'train_score': score}
+
+        pred_test = model.predict(X_test)
+        test_score = accuracy_score(y_test, pred_test)
+        resp['test_score'] = test_score
         return resp
 
 
@@ -88,6 +99,36 @@ class svm(classifier):
         self.name = "SVM"
         self.filename = 'svm'
         super().__init__(model=SVC)
+
+class KNN(classifier):
+    """
+    Wrapper for k-nearest neighbors Models
+
+    Arguments:
+        None
+    """
+    def __init__(self):
+        params = dict(
+            n_jobs=-1
+        )
+        self.name = "KNN"
+        self.filename = 'knn'
+        super().__init__(model=KNeighborsClassifier, params=params)
+
+class GaussianNB(classifier):
+    """
+    Wrapper for Gaussian Naive Bayes Models
+
+    Arguments:
+        None
+    """
+    def __init__(self):
+        params = dict(
+            priors=None
+        )
+        self.name = "GaussianNB"
+        self.filename = 'gaussianNB'
+        super().__init__(model=gnb, params=params)
 
 
 class rf(classifier):

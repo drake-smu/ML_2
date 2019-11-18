@@ -2,6 +2,7 @@
 import sys
 import numpy as np
 from sklearn.base import clone
+from sklearn.model_selection import KFold, train_test_split
 import itertools
 from pprint import pprint
 
@@ -9,6 +10,7 @@ import pickle
 
 import matplotlib.pyplot as plt
 
+from models.utils import printProgressBar as pbar, mean_confidence_interval
 
 class Grid:
     """
@@ -101,61 +103,74 @@ class Grid:
 
     def train(self, X, y, n_splits, random_state):
         self.__pre()
-        for (i, gridSet) in self.gridSets.items():
+        for ix, (i, gridSet) in enumerate(self.gridSets.items()):
+            pref = "GridSet {}/{}".format((ix+1),len(self.gridSets.items()))
+            l = len(gridSet['hypers'])
+            # print(len(enumerate(self.gridSets.items()),ix)
+            pbar(0,l,prefix=pref, suffix="Complete", length=50)
             self.gridSets[i]['results'] = []
-            for hypers in gridSet['hypers']:
+            for j,hypers in enumerate(gridSet['hypers']):
                 _score = 0
                 folds = self.model.train(X, y, n_splits, random_state, hypers)
-                _score = np.mean([folds[x]['score'] for x in folds.keys()])
-
-                if _score > self.max_score:
-                    self.max_score, self.max_model = _score, clone(
+                _score = np.mean([folds['folds'][x]['train_score'] for x in folds['folds'].keys()])
+                _test_score = folds['test_score']
+                if _test_score > self.max_score:
+                    self.max_score, self.max_model = _test_score, clone(
                         self.model.model).set_params(**hypers)
-                if _score < self.min_score:
-                    self.min_score, self.min_model = _score, clone(
+                if _test_score < self.min_score:
+                    self.min_score, self.min_model = _test_score, clone(
                         self.model.model).set_params(**hypers)
                 self.gridSets[i]['results'].append(folds)
+                pbar(j+1,l,prefix=pref, suffix="Complete", length=50)
 
     def format_results(self, gridID=0):
         params = []
-        scores = []
-        means = []
-        stds = []
+        scores,train_scores = [],[]
+        means,train_means = [],[]
+        train_cis,train_stds = [], []
         # pprint(self.gridSets[gridID])
         for hp_id, hp in enumerate(self.gridSets[gridID]['hypers']):
             _params = hp
             # print('params: ',_params)
             _scores = []
-            for (fold_id, fold) in self.gridSets[gridID]['results'][hp_id].items():
-                _score = fold['score']
+            _train_scores = []
+            for (fold_id, fold) in self.gridSets[gridID]['results'][hp_id]['folds'].items():
+                _score = fold['train_score']
+                # _trainScore = fold['train_score']
                 # print('score: ',_score)
-                _scores.append(_score)
-            _mean_score = np.mean(_scores)
-            _std_score = np.std(_scores)
+                # _scores.append(_score)
+                _train_scores.append(_score)
+            
+            _mean_train_score,_ci = mean_confidence_interval(_train_scores)
+            
+            _std_train_score = np.std(_train_scores)
             # print(_scores)
+            _mean_score = self.gridSets[gridID]['results'][hp_id]['test_score']
             params.append(_params)
-            scores.append(_scores)
+            train_scores.append(_train_scores)
             means.append(_mean_score)
-            stds.append(_std_score)
+            train_means.append(_mean_train_score)
+            train_stds.append(_std_train_score)
+            train_cis.append(_ci)
 
-        return (params, scores, means, stds)
+        return (params, train_scores, means, train_means, train_stds, train_cis)
 
     def vizualizeSet(self,
                      gridID=0,
                      figSize=(20, 6)):
-        params, scores, means, stds = self.format_results(gridID)
+        params, train_scores, means, train_means, stds, train_cis = self.format_results(gridID)
 
         fig1, (left_plot, right_plot) = plt.subplots(
             nrows=1, ncols=2, figsize=figSize)
         fig1.suptitle("Model '{}', Grid {}".format(
             self.model.name, gridID))
 
-        left_plot.boxplot(scores, patch_artist=True)
+        left_plot.boxplot(train_scores, patch_artist=True)
         left_plot.set_title("Model Resample Scores Comparison")
         left_plot.set_xlabel('Model #')
         left_plot.set_ylabel('Score')
 
-        right_plot.scatter(means, stds, alpha=0.5)
+        right_plot.scatter(train_means, stds, alpha=0.5)
         right_plot.set_title(
             "Bias / Variance Analysis")
         right_plot.set_xlabel('Mean Resample Scores per Model')
@@ -175,22 +190,22 @@ class Grid:
 
     def pprint(self, outputPath=False):
         for id in self.gridSets.keys():
-            params, scores, means, stds = self.format_results(id)
+            params, train_scores, means, train_means, train_stds, train_cis = self.format_results(id)
 
             print("="*50,
                   "Model '{}', Grid {}".format(self.model.name, id),
                   "-"*50,
                   sep="\n")
 
-            for index, (mean, std, _params) in enumerate(zip(means, stds, params)):
-                line_out = "Model {}\n    Parameters: {}\n    Score: {:>5.3f} (+/-{:>5.3f} 95% CI)".format(
-                    index+1, _params, mean, std * 2)
+            for index, (mean, train_mean, train_std, train_ci, _params) in enumerate(zip(means, train_means, train_stds,train_cis, params)):
+                line_out = "Model {}\n    Parameters: {}\n    Score/Traing Score: {:>5.3f}/{:>5.3f} (+/-{:>5.3f} 95% CI)".format(
+                    index+1, _params, mean,train_mean, train_ci)
                 if mean == self.max_score:
-                    line_out = "Model {} [++++]\n    Parameters: {}\n    Score: {:>5.3f} (+/-{:>5.3f} 95% CI)".format(
-                        index+1, _params, mean, std * 2)
+                    line_out = "Model {} [++++]\n    Parameters: {}\n    Score/Traing Score: {:>5.3f}/{:>5.3f} (+/-{:>5.3f} 95% CI)".format(
+                    index+1, _params, mean,train_mean, train_ci)
                 elif mean == self.min_score:
-                    line_out = "Model {} [----]\n    Parameters: {}\n    Score: {:>5.3f} (+/-{:>5.3f} 95% CI) ".format(
-                        index+1, _params, mean, std * 2)
+                    line_out = "Model {} [----]\n    Parameters: {}\n    Score/Traing Score: {:>5.3f}/{:>5.3f} (+/-{:>5.3f} 95% CI)".format(
+                    index+1, _params, mean,train_mean, train_ci)
                 print(line_out, end='\n\n')
         print("="*50)
 
@@ -228,14 +243,16 @@ class GridSearch:
         self.random_state = random_state
         self.X = X
         self.y = y
+        
         self.training = (X, y, n_splits, random_state)
         test = []
         for (name, grid) in self.grids.items():
             print(name, '...')
-            grid.train(*self.training)
+            
+            test.append(grid.train(*self.training))
             _results = grid.gridSets
             grid.vizualizeFull()
-            test.append(grid.train(*self.training))
+            
             self.results[name] = _results
             if grid.max_score > self.max_score:
                 self.max_score, self.max_model = grid.max_score, grid.max_model
@@ -286,8 +303,16 @@ def loadGrid(path="outputs/results.pickle"):
     Returns:
         object -- Returns stored GridSearch Object
     """
-    with open(path, 'rb') as f:
+
+    try:
+        f = open(path, 'rb')
+        print('*'*20+'\nLOADING STORED MODEL\n'+'*'*20)
         # The protocol version used is detected automatically, so we do not
         # have to specify it.
         data = pickle.load(f)
+        f.close()
         return data
+    except IOError:
+        print('File is not accessible')
+        raise
+    
