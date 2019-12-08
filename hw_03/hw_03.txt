@@ -1,0 +1,60 @@
+This is a pretty simple assignment.  You will do something you do every day, but today it will be with 
+matrix manipulations.
+
+The problem is: you and your work friends are trying to decide where to go for lunch. You have to pick
+a restaurant thats best for everyone.  
+Then you should decided if you should split into two groups so everyone is happier.
+
+Despite the simplicity of the process you will need to make decisions regarding how to process the data.
+
+This process was thougholy investigated in the operation research community.  This approah can prove helpful
+on any number of decision making problems that are currently not leveraging machine learning.
+
+You asked your 10 work friends to answer a survey. They gave you back the following dictionary object.
+
+########################################################################
+# Transform the restaurant data into a matrix(M_resturants) use the same column index.
+
+# The most imporant idea in this project is the idea of a linear combination.
+
+# 1. Informally describe what a linear combination is  and how it will 
+     relate to our resturant matrix.
+
+        A linear combination is an expression of a set of terms that is 
+        constructed by multipying the terms by some constant and adding the 
+        results to form a singal scalar
+        Ex:  Vector [1,2,3,4,5]  ; scalars/coefficients [a,b,c,d,e]
+        Linear_Combination = a*1 + b*2 + c*3 + d*4 + e*5
+
+
+# 2. Choose a person and compute(using a linear combination) the top restaurant
+     for them.  What does each entry in the resulting vector represent.
+
+# 3. Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from 
+     all people.  What does the a_ij matrix represent?
+
+# 4. Sum all columns in M_usr_x_rest to get optimal restaurant for all users.
+     What do the entry’s represent?
+
+# 5. Now convert each row in the M_usr_x_rest into a ranking for each user and 
+     call it M_usr_x_rest_rank.   Do the same as above to generate the optimal 
+     restaurant choice.
+
+# 6. Why is there a difference between the two?  What problem arrives?  What 
+     does represent in the real world?
+
+# 7. How should you preprocess your data to remove this problem.
+
+# 8. Find user profiles that are problematic, explain why?
+
+# 9. Think of two metrics to compute the disatistifaction with the group.
+
+# 10. Should you split in two groups today?
+
+# 11. Ok. Now you just found out the boss is paying for the meal. How should 
+      you adjust. Now what is best restaurant?
+
+# 12. Tommorow you visit another team. You have the same restaurants and they
+      told you their optimal ordering for restaurants.  Can you find their 
+      weight matrix?    
+    
