@@ -1,10 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Feb 22 20:06:31 2019
 
-@author: Chris
-"""
-
+#%%
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -16,19 +11,25 @@ import matplotlib.cm as cm  #https://matplotlib.org/api/cm_api.html
 
 # Decision making with Matrices
 
-# This is a pretty simple assingment.  You will do something you do everyday, but today it will be with matrix manipulations.
+# This is a pretty simple assingment.  You will do something you do everyday,
+# but today it will be with matrix manipulations.
 
-# The problem is: you and your work firends are trying to decide where to go for lunch. You have to pick a resturant thats best for everyone.  
-# Then you should decided if you should split into two groups so eveyone is happier.
+# The problem is: you and your work firends are trying to decide where to go for
+# lunch. You have to pick a resturant thats best for everyone.  
+# Then you should decided if you should split into two groups so eveyone is
+# happier.
 
-# Displicte the simplictiy of the process you will need to make decisions regarding how to process the data.
+# Displicte the simplictiy of the process you will need to make decisions
+# regarding how to process the data.
 
-# This process was thoughly investigated in the operation research community.  This approah can prove helpful on any number of 
-# decsion making problems that are currently not leveraging machine learning.
+# This process was thoughly investigated in the operation research community.
+# This approah can prove helpful on any number of decsion making problems that
+# are currently not leveraging machine learning.
 
-# You asked your 10 work friends to answer a survey. They gave you back the following dictionary object.
+# You asked your 10 work friends to answer a survey. They gave you back the
+# following dictionary object.
 
-
+#%%
 #to determine random values for weights
 print(np.array([np.random.dirichlet(np.ones(5),size=1)]))
 
@@ -115,10 +116,11 @@ people = {'Jane': {'willingness to travel': 0.1596993,
                   'vegetarian': 0.01323548,
                   }                  
           }
+print(people)
 
+#%%
 # Transform the user data into a matrix(M_people). Keep track of column and row ids.
-
-                                       # convert each person's values to a list
+# convert each person's values to a list
 
 peopleKeys, peopleValues = [], []
 lastKey = 0
@@ -138,7 +140,7 @@ for k1, v1 in people.items():
             
 
 #here are some lists that show column keys and values
-print(peopleKeys)
+print(peopleKeys,'\n')
 print(peopleValues)
 
 
@@ -147,6 +149,7 @@ peopleMatrix = np.array(peopleValues)
 
 peopleMatrix.shape
 
+#%%
 
 # Next you collected data from an internet website. You got the following information.
 
@@ -242,7 +245,9 @@ print(restaurantsKeys)
 print(restaurantsValues)
 
 len(restaurantsValues)
-#reshape to 2 rows and 4 columns
+#reshape to 10 rows and 4 columns
+
+#%%
 
 #converting lists to np.arrays is easy
 restaurantsMatrix = np.reshape(restaurantsValues, (10,4))
@@ -254,13 +259,12 @@ restaurantsMatrix.shape
 # Matrix multiplication
 # Dot products are the matrix multiplication of a row vectors and column vectors (n,p) * (p,n)
 #  shape example: ( 2 X 4 ) * (4 X 2) = 2 * 2
-a = np.array([[1, 0], [0, 1]])
-b = np.array([[1],[2]])
+# a = np.array([[1, 0], [0, 1]])
+# b = np.array([[1],[2]])
 
-a.shape, b.shape
-
-# when 2D arrays are involved, np.dot give the matrix product.
-np.dot(a,b)
+# a.shape, b.shape
+# np.dot(a,b)
+#%%
 
 # documentation: https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
 # intuition: https://www.mathsisfun.com/algebra/matrix-multiplying.html
@@ -276,10 +280,11 @@ np.dot(c,d)
 # matmul give the matrix product, too.
 np.matmul(a,b)
 
-
+#%%
 restaurantsMatrix.shape, peopleMatrix.shape
 #However, this won't work...
-np.matmul(restaurantsMatrix, peopleMatrix)
+np.matmul(restaurantsMatrix, peopleMatrix.T)
+#%%
 
 # The most imporant idea in this project is the idea of a linear combination.
 
@@ -299,7 +304,7 @@ print(restaurantsValues)
 
 
 restaurantsMatrix.shape, peopleMatrix.shape
-
+#%%
 #We need to swap axis on peopleMatrix
 #newPeopleMatrix = np.swapaxes(peopleMatrix, 1, 0)
 
@@ -309,16 +314,17 @@ newPeopleMatrix = np.swapaxes(peopleMatrix, 0, 1)
 newPeopleMatrix.shape, restaurantsMatrix.shape
 restaurantsMatrix.shape, newPeopleMatrix.shape
 
-# Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from all people.  What does the a_ij matrix represent?
+# Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from all
+# people.  What does the a_ij matrix represent?
 #Let's check our answers
 
 
-np.set_printoptions(threshold=np.nan)
+# np.set_printoptions(threshold=np.nan)
 
 results = np.matmul(restaurantsMatrix, newPeopleMatrix)
 
 results                             
-
+#%%
 #rows are restaurants, columns are people
 
 # Sum all columns in M_usr_x_rest to get optimal restaurant for all users.  What do the entry’s represent?
@@ -332,7 +338,7 @@ restaurantsKeys
 # Do the same as above to generate the optimal resturant choice.
 results
 
-
+#%%
 
 # Say that rank 1 is best
 
@@ -354,7 +360,7 @@ results
                  
 np.sum(ranks, axis=1)         
 #Out[10]: array([55, 55, 55, 55, 55, 55, 55, 55, 55, 55], dtype=int64)
-
+#%%
 
 # From sillouhette analysis with K-means clustering
 
@@ -386,7 +392,7 @@ np.sum(group1, axis=1)
 np.sum(group2, axis=1)
 # Group 2 wants to go to Amaze
 
-
+#%%
 
 #first plot heatmap
 #https://seaborn.pydata.org/generated/seaborn.heatmap.html
@@ -431,7 +437,7 @@ print(pca.components_)
 print(pca.explained_variance_)
 
 
-
+#%%
 
 
 #This function was shamefully taken from the below and modified for our purposes
@@ -457,7 +463,7 @@ ax.set(xlabel='component 1', ylabel='component 2',
           xlim=(-1.5, 1.5), ylim=(-1.5, 1.5))
 fig.show
 
-
+#%%
 
 # Now use peoplePCA for clustering and plotting
 # https://scikit-learn.org/stable/modules/clustering.html 
@@ -496,7 +502,7 @@ plt.show()
 #cluster 0 is green, cluster 1 is red, cluster 2 is cyan (blue)
 
 
-
+#%%
 
 #Now do the same for restaurants
 
@@ -523,7 +529,7 @@ ax.set(xlabel='component 1', ylabel='component 2',
           xlim=(-4, 4), ylim=(-4, 4))
 fig.show
 
-
+#%%
 
 # Now use restaurantsMatrixPcaTransform for plotting 
 # https://scikit-learn.org/stable/modules/clustering.html
@@ -560,7 +566,7 @@ plt.show()
 #y=0 (flacos), y=1 (Joes), y=2 (Poke), y=3 (Sush-shi), y=4 (Chick Fillet),
 #y=5 (Mackie Des), y=6 (Michaels), y=7 (Amaze), y=8 (Kappa), y=9 (Mu)
 
-
+#%%
 
 #https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
 # I used "single" linkage, 
@@ -617,7 +623,7 @@ ax.tick_params(axis='x', which='major', labelsize=25)
 ax.tick_params(axis='y', which='major', labelsize=25)
 plt.show()  
 
-
+#%%
 #People Clustering metrics
 #https://scikit-learn.org/stable/modules/clustering.html#clustering-performance-evaluation
 
@@ -647,7 +653,7 @@ for n_clusters in range_n_clusters:
      score = metrics.davies_bouldin_score(peopleMatrixPcaTransform, cluster_labels)  
      print("The Davies-Bouldin score for :", n_clusters, " clusters is: ", score)
 
-
+#%%
 
 #Silhouette Analysis with Kmeans Clustering on the PCA transformed People Matrix
 # https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html#sphx-glr-auto-examples-cluster-plot-kmeans-silhouette-analysis-py
@@ -756,7 +762,7 @@ for n_clusters in range_n_clusters:
 
 plt.show()
 
-
+#%%
 #Restaurant Clustering metrics
 
 print("The Calinski-Harabaz Index is used to measure better defined clusters.")
@@ -786,7 +792,7 @@ for n_clusters in range_n_clusters:
      print("The Davies-Bouldin score for :", n_clusters, " clusters is: ", score)
 
 
-
+#%%
 
 #Silhouette Analysis with Kmeans Clustering on the PCA transformed Restaurant Matrix
 range_n_clusters = [2, 3, 4, 5, 6]
@@ -895,7 +901,7 @@ for n_clusters in range_n_clusters:
 plt.show()
 
 
-
+#%%
 ### Trying to answer if we can find weights from rankings
 
 # Tommorow you visit another team. You have the same restaurants and they told you their optimal ordering for restaurants.  
@@ -910,14 +916,14 @@ results
 
 newPeopleMatrix.shape
 
-
+#%%
 # Say that rank 1 is best
 
 #reference: https://docs.scipy.org/doc/numpy/reference/generated/numpy.argsort.html
 # Argsort returns the indices that would sort an array - https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
 # By default, argsort is in ascending order, but below, we make it in descending order and then add 1 since ranks start at 1
 
-np.set_printoptions(threshold=np.nan)
+# np.set_printoptions(threshold=np.nan)
 
 
 sortedResults = results.argsort()[::-1]
@@ -925,13 +931,17 @@ sortedResults.shape
 
 
 np.sort(results)
-
 #https://en.wikipedia.org/wiki/Invertible_matrix
 #if we know restaurantsMatrix and Results Matrix can we calculate peopleMatrix?
 #If the matrix A is invertible, then the equation Ax=b has a unique solution, namely x=A−1b.
 # If A is not invertible, there may be either zero or many solutions to your problem.
 
 results
+
+#%%
+
+
+
 
 
 #Ax = b 
@@ -988,7 +998,7 @@ np.linalg.inv(a)
 
 print("Imagine an old overhead film projector that shines a bright light through film onto a white wall. The pixels in the film are projected to the pixels on the wall.\n\nIf I stop the film projection on a single frame, you will see the pixels of the film on the wall and I ask you to regenerate the film based on what you see. That's easy, you say, just take the inverse of the matrix that performed the projection. An Inverse of a matrix is the reversal of the projection.\nNow imagine if the projector was corrupted, and I put a distorted lens in front of the film. Now multiple pixels are projected to the same spot on the wall. I asked you again to 'undo this operation with the matrix inverse'. You say: 'I can't because you destroyed information with the lens distortion, I can't get back to where we were, because the matrix is either Singular or Degenerate.'\n\nA matrix that can be used to transform some data into other data is invertable only if the process can be reversed with no loss of information. If your matrix can't be inverted, perhaps you are defining your projection using a guess-and-check methodology rather than using a process that guarantees a non-corrupting transform.")
 
-
+#%%
 # pinv returns the inverse of your matrix (A) when it is available and the pseduo inverse when A isn't
 # an n by n matrix.
 # http://mathworld.wolfram.com/Moore-PenroseMatrixInverse.html
@@ -1056,6 +1066,4 @@ Atranspose.shape
 
 #With the rankings matrix however, if you could find the clusters each person belongs to, you could still
 #come to a conclusion about the place(s) to take the other team to lunch.
-
-
 
