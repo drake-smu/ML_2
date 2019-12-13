@@ -111,15 +111,16 @@ class Grid:
             self.gridSets[i]['results'] = []
             for j,hypers in enumerate(gridSet['hypers']):
                 _score = 0
+                
                 folds = self.model.train(X, y, n_splits, random_state, hypers)
                 _score = np.mean([folds['folds'][x]['train_score'] for x in folds['folds'].keys()])
                 _test_score = folds['test_score']
                 if _test_score > self.max_score:
-                    self.max_score, self.max_model = _test_score, clone(
-                        self.model.model).set_params(**hypers)
+                    self.max_score, self.max_model = _test_score, \
+                        folds['model']#self.model.model.set_params(**hypers)
                 if _test_score < self.min_score:
-                    self.min_score, self.min_model = _test_score, clone(
-                        self.model.model).set_params(**hypers)
+                    self.min_score, self.min_model = _test_score, \
+                        folds['model']#clone(self.model.model).set_params(**hypers)
                 self.gridSets[i]['results'].append(folds)
                 pbar(j+1,l,prefix=pref, suffix="Complete", length=50)
 

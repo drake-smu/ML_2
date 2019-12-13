@@ -271,19 +271,15 @@ def part_one(grids):
 def part_three():
     n_folds = 5
     n_splits, random_state = 15, 101
-
-    
-
     return dict(X=X, y=Y, n_splits=n_splits, random_state=random_state)
 
 def part_four(gs, data):
-    try:
-        
+    try:        
         gs = loadGrid(output_path+'pt3.pickle')
     except:
         print('*'*20+'\nRUNNING MODELS\n'+'*'*20)
         gs.run(**data)
-
+    
     gs.vizualizeAll(saveFigsPath=output_path)
     return gs
 
@@ -291,7 +287,7 @@ def part_four(gs, data):
 def part_five(gs):
     gs.save(path=output_path+'pt3.pickle')
     print('GridSearch Object saved at :\n{}'.format(output_path+'pt3.pickle'))
-    # gs.pprint(outputPath=output_path+'pt5.txt')
+    gs.pprint(outputPath=output_path+'pt5.txt')
 
 
 def part_six_seven(gs):
@@ -299,6 +295,7 @@ def part_six_seven(gs):
 
 
 # %%
+
 def main():
     import inspect
     logReg_Grid1 = Grid(
@@ -306,30 +303,6 @@ def main():
         grid_opts=[{'C': [0.1, 1, 10],
                     'max_iter': [100, 500, 1000],
                     'penalty': ['l2']}])
-
-    # rf_Grid = Grid(
-    #     rf(),
-    #     grid_opts=[{'n_estimators': [10, 100],
-    #                 'max_features': ['auto'],
-    #                 'max_depth': [1, 5],
-    #                 'criterion':['gini', 'entropy']}])
-
-    # svm_Grid = Grid(
-    #     svm(),
-    #     grid_opts=[{
-    #         'C': [0.01, 0.1, 1, 10],
-    #         'kernel': ['linear', 'poly']
-    #     }, {
-    #         'C': [0.01, 0.1, 1, 10],
-    #         'gamma': [ 0.001, 0.01, 1],
-    #         'kernel': ['rbf']
-    #     }])
-
-    # logReg_Grid = Grid(
-    #     logReg(),
-    #     grid_opts=[{'C': [0.1, 1, 10],
-    #                 'max_iter': [100, 500, 1000],
-    #                 'penalty': ['l2']}])
 
     rf_Grid = Grid(
         rf(),
@@ -388,11 +361,16 @@ def main():
             resp[key] = pt(*newOpts)
         else:
             resp[key] = pt(opts)
-        print('Code Preview:', inspect.getsource(pt), sep='\n')
-
+        # print('Code Preview:', inspect.getsource(pt), sep='\n')
+    pr = '''\
+        Based on our final models from the grid search, we can
+        see that the RandomForest classifier is quite useful 
+        for this task. Other more complex classifiers struggled
+        to converge in any reasonable amount of time. Maybe they 
+        would be more practicle with more compute resources.
+        '''
+    print(pr)
 
 # %%
 if __name__ == "__main__":
     main()
-
-# %%

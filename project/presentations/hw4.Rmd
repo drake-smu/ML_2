@@ -1,0 +1,97 @@
+---
+title: "Complex and Hypercomplex Neural Networks"
+subtitle: "ft. Quaternions and friends"
+author: "Carson Drake"
+institute: "SMU DS7335"
+date: "2019/12/01 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r, load_refs, include=FALSE, cache=FALSE}
+library(RefManageR)
+BibOptions(check.entries = FALSE,
+           bib.style = "alphabetic",
+           cite.style = 'authortitle',
+           max.names= 1,
+           style = "markdown",
+           hyperlink = TRUE,
+           dashed = FALSE)
+myBib <- ReadBib("./bibliography.bib", check = FALSE)
+```
+`r AutoCite(myBib, "qsurvey")`
+`r AutoCite(myBib, "andiva_2019")`
+
+
+```{r child = '_01.Rmd'}
+```
+
+
+---
+class: inverse, middle, center
+
+# Other Options?
+
+???
+Is there anything else we can try to make 
+deep learning better?  
+
+What else can we 
+besides what we've been trying?
+
+---
+class: inverse, middle, center
+# Background
+
+---
+# Numbers
+
+---
+# Quaternions (History)
+
+---
+# Quaternion (Algebra)
+
+---
+class: inverse, middle, center
+# Quaternion Valued <br/>Neural Networks
+
+---
+# Intro to QNN
+
+---
+# CNN vs QCNN
+
+---
+# LSTM vs QLSTM
+
+---
+class: inverse, middle, center
+# QNN Research<br/>Examples
+
+---
+# Parcollet, Morchid, and Linarès et al.
+
+---
+# Speech Recognition
+
+---
+# Heterogeneous Image Processing
+
+---
+# R2H Layer (Real-to-Quaternion)
+
+---
+class: inverse, middle, center
+# Going Forward...
+
+```{r child = '_000.Rmd'}
+```

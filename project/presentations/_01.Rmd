@@ -1,0 +1,46 @@
+---
+class: inverse
+background-image: url("rsc/diagrams/nnZoo.png")
+background-size: contain
+background-position: 80% 3%
+#State of Deep Learning
+
+
+## Struggles
+
+--
+* Generalization
+
+--
+* Training Bias
+
+--
+* Over/Under fitting
+
+--
+* Model Size/Complexity
+
+--
+
+## Solutions?
+
+--
+
+* More complex models
+
+--
+* Layer Stacking
+
+--
+* Aggressive Data Dollection
+
+--
+* Adding more humans into "machine"  
+learning
+
+
+.footnote[image src: The Neural Network Zoo  
+`r AutoCite(myBib, "nnZoo")`
+]
+
+

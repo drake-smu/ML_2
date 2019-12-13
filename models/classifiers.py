@@ -49,9 +49,10 @@ class classifier:
                              random_state=random_state)
         resp = {}
         resp['folds'] = {}
+        model = clone(self.model)
+        model.set_params(**hypers)
         for idx, (train_index, test_index) in enumerate(kf.split(X_train, y_train)):
-            model = clone(self.model)
-            model.set_params(**hypers)
+            
             model.fit(X_train[train_index], y_train[train_index])
             pred = model.predict(X_train[test_index])
             score = accuracy_score(y_train[test_index], pred)
@@ -66,6 +67,7 @@ class classifier:
         pred_test = model.predict(X_test)
         test_score = accuracy_score(y_test, pred_test)
         resp['test_score'] = test_score
+        resp['model'] = model
         return resp
 
 
