@@ -1,8 +1,17 @@
+
 ---
 # References
 
+
 ```{r refs, echo=FALSE, results="asis"}
-PrintBibliography(myBib)
+PrintBibliography(myBib,start=0, end=5)
+```
+
+
+---
+# Reference II
+```{r refs2, echo=FALSE, results="asis"}
+PrintBibliography(myBib,start = 6)
 ```
 
 

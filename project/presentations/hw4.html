@@ -7,6 +7,7 @@
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="main.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -16,64 +17,55 @@ class: center, middle, inverse, title-slide
 ## ft. Quaternions and friends
 ### Carson Drake
 ### SMU DS7335
-### 2019/12/01 (updated: 2019-12-12)
+### 2019/12/01 (updated: 2019-12-14)
 
 ---
 
-
-
-([Parcollet, et al., 2019](#bib-qsurvey))
-([Andiva, 2019](#bib-andiva_2019))
 
 
 
 ---
 class: inverse
-background-image: url("rsc/diagrams/nnZoo.png")
-background-size: contain
-background-position: 80% 3%
 #State of Deep Learning
+
 
 
 ## Struggles
 
---
+.pull-left[
+
+
+
 * Generalization
 
---
 * Training Bias
 
---
 * Over/Under fitting
 
---
 * Model Size/Complexity
-
---
 
 ## Solutions?
 
---
 
 * More complex models
 
---
+
 * Layer Stacking
 
---
+
 * Aggressive Data Dollection
 
---
+
 * Adding more humans into "machine"  
 learning
 
-
-.footnote[image src: The Neural Network Zoo  
-([Veen, 2019](#bib-nnZoo))
 ]
 
+.pull-right[
+![](https://imgs.xkcd.com/comics/machine_learning.png)
 
-
+.footnote[image src: [xkcd](https://xkcd.com/1838/)]
+]
 
 ---
 class: inverse, middle, center
@@ -88,30 +80,251 @@ What else can we
 besides what we've been trying?
 
 ---
-class: inverse, middle, center
-# Background
+class: center
+# What about actual math?
+.pull-left[
+![](./rsc/diagrams/vectorSpace.png)
+
+]
+
+.pull-right[
+![](./rsc/diagrams/algebras.png)
+]
+
+.footnote[
+.left[
+left: [www.euclideanspace.com/maths/algebra/multidimensional/vectorSpace.png](https://www.euclideanspace.com/maths/algebra/multidimensional/vectorSpace.png)  
+right: ([Chappell, et al., 2016](#bib-algebra))
+]]
+
+???
+Rather than trying to imagine yet another combination of layers and cells,  
+lets take a step back and think about what is going on at the most fundamental 
+level of these networks.   
+
+Lets look at the math!  
+
+Something interesting sticks out in the two graphics above.  
+
+One subject in particular seem to be related to or fundamental for the fields 
+related to mainstream algebra as well as vectors and vector space.
+---
+background-image:url(./rsc/memes/quaternions.jpg)
+class: inverse
+
+.footnote[src: [https://makeameme.org/meme/quaternions]()]
+
+???
+QUATERNIONS!
 
 ---
-# Numbers
+# Quaternion | Background
+.pull-left[
+
+`\begin{equation}
+\mathbf{i}^{2}=\mathbf{j}^{2}=\mathbf{k}^{2}=\mathbf{i} \mathbf{j} \mathbf{k}=-1
+\end{equation}`
+
+`\begin{equation}
+\begin{aligned} 
+Q&amp;=r 1+x \mathbf{i}+y \mathbf{j}+z \mathbf{k}\\
+\\
+q&amp;=(r, \vec{v}), q \in \mathbf{H}, r \in \mathbf{R}, \vec{v} \in \mathbf{R}^{3}\\
+\\
+Q_{\operatorname{mat}}&amp;={\left[
+\begin{array}{cccc}
+{r} &amp; {-x} &amp; {-y} &amp; {-z} \\ 
+{x} &amp; {r} &amp; {-z} &amp; {y} \\ 
+{y} &amp; {z} &amp; {r} &amp; {-x} \\ 
+{z} &amp; {-y} &amp; {x} &amp; {r}
+\end{array}\right]}\end{aligned}
+\end{equation}`
+
+
+]
+
+.pull-right[
+.history[
+## History
+
+- Hamilton in 1843
+- "vector" and "scalar"
+- Gibbs (and vector analysis)
+- Resurgence
+  - Quantum Mechanics
+  - Number Theory
+]]
+
+???
+Sir William Hamilton
+in a flash of genius discovered
+the fundamental formula for
+quaternion multiplication 
+&amp; cut it on a stone of this bridge  
+
+* Hamilton's work in quaternions was a polarizing topic at the time.  
+Some went as far as to deam them "mixed evil".  
+* However greats such as Maxwell even found them quite elegant and 
+expressive.  
+* Josiah Gibbs, introduced his own vector analysis. Greatly recycling the 
+properties of the imaginary vector part, but rather than their components 
+multiplying to -1 they equaled 0;
+
 
 ---
-# Quaternions (History)
+# Quaternion | Properties
 
----
-# Quaternion (Algebra)
+.pull-left.center[
+`\begin{equation}
+\begin{array}{c|c c c c}
+{\times}&amp;{1} &amp; {i} &amp; {j} &amp; {k}\\ 
+\hline {1} &amp; {1} &amp; {i} &amp; {j} &amp; {k}\\
+{i} &amp; {i} &amp; {-1} &amp; {k} &amp; {-j}\\ 
+{j} &amp; {j} &amp; {-k} &amp; {-1} &amp; {i}\\ 
+{k} &amp; {k} &amp; {j} &amp; {-i} &amp; {-1}\end{array}
+\end{equation}`
+
+&lt;br/&gt;
+![:scale 200px](./rsc/diagrams/i_to_j_to_k.svg)
+]
+
+.pull-right.history[
+### Properties
+
+* Non-commuting
+* Anti-commuting
+* Double Cover
+
+`\begin{equation}
+\begin{aligned} 
+i j &amp;=-j i=k \\ 
+j k &amp;=-k j=i \\ 
+k i &amp;=-i k=j \end{aligned}
+\end{equation}`
+
+.footnote[
+.right[
+&lt;!--top: [By Maschen - Own work, CC BY-SA 3.0](https://commons.wikimedia.org/w/index.php?curid=27793856--&gt;
+img: [By Cayley_graph_Q8.png: Sullivan.t.j.Original uploader was Sullivan.t.j at en.wikipediaderivative CC BY-SA 3.0](https://commons.wikimedia.org/w/index.php?curid=16302914)
+]]
+]
+
+???
+* The "redundancy" Gibbs did away with is in fact the part of quaternions 
+that make them appealing today.
+* Non commuting means that the order operating is important. This makes them 
+very useful for calculating spacial position and roations in 3-D. Try putting you phone down on a surface.  
+Flip it over (away from you)  
+rotate it 90 degrees.  
+Note the potion.  
+Now begin in the same start position but this time rotate 90, then flip over its end.  
+You should find it face down but oriented the opposite direction.
+* This is related to double cover. In 3D space, a quaternion performs 2 full rotations 
+to complete 1 full 4d rotation.
+
 
 ---
 class: inverse, middle, center
 # Quaternion Valued &lt;br/&gt;Neural Networks
 
----
-# Intro to QNN
 
 ---
-# CNN vs QCNN
+#Hamilton Product
+
+![](./rsc/diagrams/hamilton.png)
+
+.center[
+`\begin{equation}
+\begin{aligned}\
+Q_{1}\otimes Q_{2} &amp;\neq Q_{2} \otimes Q_{1} \\
+Q_{1}\otimes Q_{2} &amp;=\left(r_{1} r_{2}-x_{1} x_{2}-y_{1} y_{2}-z_{1} z_{2}\right) \\ 
+&amp;+\left(r_{1} x_{2}+x_{1} r_{2}+y_{1} z_{2}-z_{1} y_{2}\right) i \\ 
+&amp;+\left(r_{1} y_{2}-x_{1} z_{2}+y_{1} r_{2}+z_{1} x_{2}\right) j \\ 
+&amp;+\left(r_{1} z_{2}+x_{1} y_{2}-y_{1} x_{2}+z_{1} r_{2}\right) k \end{aligned}
+\end{equation}`
+]
+
+???
+* The Hamilton product (⊗) is used in QNN to remplace the standard real-valued dot
+product, and to perform transforma- tions between two quaternions
+
+* In the case of a quaternion-valued neural network, the quaternion-weight
+components are shared through multiple quaternion-input parts during the
+Hamilton product , creating relations within the elements.
+
+---
+background-image: url(./rsc/real_conv2.png)
+background-size: contain
+# CNN vs QCNN (Real)
+
+
+.footnote[
+src: ([Zhu, et al., 2018](#bib-qConv2))
+]
+
+???
+in the specific case of image recognition, a good model has to efficiently
+encode local relations within the input features, such as between the Red,
+Green, and Blue (R,G,B) channels of a single pixel, as well as structural
+relations  
+
+Traditional real-valued CNNs consider pixels as three different and separated
+values (R, G, B), while a more natural representation is to process a pixel as a
+single multi- dimensional entity
+
+---
+background-image: url(./rsc/q_conv2.png)
+background-size: contain
+# CNN vs QCNN (Quaternion)
+
+
+
+.footnote[
+src: ([Zhu, et al., 2018](#bib-qConv2))
+]
+
+---
+background-image: url(/rsc/diagrams/conv_q.png)
+background-size: contain
+# CNN vs QCNN (Quaternion)
+
+
+
+.footnote[
+src: ([Gaudet, et al., 2018](#bib-gaudet_maida_2018))
+]
 
 ---
 # LSTM vs QLSTM
+
+
+.pull-left[
+
+`\begin{equation}
+\begin{aligned}\
+&amp;\text{Quaternion-Valued}\\
+f_{t}&amp;=\sigma\left(W_{f} \otimes x_{t}+R_{f} \otimes h_{t-1}+b_{f}\right)\\
+i_{t}&amp;=\sigma\left(W_{i} \otimes x_{t}+R_{i} \otimes h_{t-1}+b_{i}\right)\\ 
+o_{t}&amp;=\sigma\left(W_{o} \otimes x_{t}+R_{o} \otimes h_{t-1}+b_{o}\right)\\  
+c_{t}&amp;=f_{t} \times c_{t-1}+i_{t} \times \alpha\left(W_{c} \otimes x_{t}+R_{c} \otimes h_{t-1}+b_{c}\right)\\
+h_{t}&amp;=o_{t} \times \alpha\left( c_{t} \right)\\
+\\
+\\
+&amp;\text{Real-Valued}\\
+f_{t} &amp;=\sigma_{g}\left(W_{f} x_{t}+U_{f} h_{t-1}+b_{f}\right)\\
+i_{t} &amp;=\sigma_{g}\left(W_{i} x_{t}+U_{i} h_{t-1}+b_{i}\right) \\
+o_{t} &amp;=\sigma_{g}\left(W_{o} x_{t}+U_{o} h_{t-1}+b_{o}\right) \\
+c_{t} &amp;=f_{t} \circ c_{t-1}+i_{t} \circ \sigma_{c}\left(W_{c} x_{t}+U_{c} h_{t-1}+b_{c}\right) \\ 
+h_{t} &amp;=o_{t} \circ \sigma_{h}\left(c_{t}\right)\end{aligned}
+\end{equation}`
+]
+
+???
+
+1. Activation functions in the quaternion domain.
+2. Dedicated parameters initialization.
+3. Quaternion-valued Backpropagation Through Time (QBPTT)
+
 
 ---
 class: inverse, middle, center
@@ -120,30 +333,101 @@ class: inverse, middle, center
 ---
 # Parcollet, Morchid, and Linarès et al.
 
+## Recent Papers
+
+* Real to H-Space Encoder for Speech Recognition [https://arxiv.org/pdf/1906.08043.pdf]()
+* Quaternion Convolutional Neural Networds for Heterogeneus Image Processing 
+[https://arxiv.org/pdf/1811.02656.pdf]()
+
+## Other
+
+* Github Repo [Orkis-Research](https://github.com/Orkis-Research)
+* A survey of quaternion neural networks [Artificial Intelligence Review](https://doi.org/10.1007/s10462-019-09752-1)
+
+
+---
+# R2H (Real to Quaternion) Layer
+
+![:scale 100%](./rsc/diagrams/r2h.png)
+.footnote[
+([Parcollet, et al., 2019](#bib-r2h))
+]
+
 ---
 # Speech Recognition
+
+![:scale 100%](./rsc/diagrams/qlstm_res.png)
+.footnote[
+([Parcollet, et al., 2019](#bib-r2h))
+]
 
 ---
 # Heterogeneous Image Processing
 
----
-# R2H Layer (Real-to-Quaternion)
+## Oh my generalization!
+
+![:scale 100%](./rsc/diagrams/results_QCAE.png)
+.footnote[
+([Parcollet, et al., 2019](#bib-qConv))
+]
+
+???
+The small number of neurons allows the QCAE to ob- tain “robust” and “compact”
+memory that build a robust hid- den representations of the image content in the
+latent space. Indeed, QCAE are not altered by heterogeneous color spaces  
+
+They demonstrate that quaternion convolutional encoder-decoders are able to
+perfectly learn the color-space with a training performed on a unique gray-scale
+image,  
+
+while real-valued CAE fail,  
+
+The Hamilton product allows QNN to encode local dependencies such as the RGB 
+relation of a pixel.  
+
+QCAE produced better quality reconstructions with respect to the PSNR and SSIM metrics
+than CAE, even with considering the unability of CAE to learn colors
 
 ---
 class: inverse, middle, center
 # Going Forward...
 
 
+
 ---
 # References
 
-&lt;a name=bib-andiva_2019&gt;&lt;/a&gt;[[And19]](#cite-andiva_2019) Andiva. _andiva/DeepLieNet_. Nov. 2019. URL: [https://github.com/andiva/DeepLieNet](https://github.com/andiva/DeepLieNet).
 
-&lt;a name=bib-qsurvey&gt;&lt;/a&gt;[[PML19]](#cite-qsurvey) T. Parcollet et al. "A survey of quaternion neural networks". In: _Artificial Intelligence Review_ (2019). DOI:
-[10.1007/s10462-019-09752-1](https://doi.org/10.1007%2Fs10462-019-09752-1).
+&lt;a name=bib-conv_real&gt;&lt;/a&gt;[[Bot+16]](#cite-conv_real) J. Bottleson et al. "clCaffe: OpenCL Accelerated Caffe for Convolutional
+Neural Networks". In: _2016 IEEE International Parallel and Distributed Processing Symposium Workshops (IPDPSW)_ (2016). DOI:
+[10.1109/ipdpsw.2016.182](https://doi.org/10.1109%2Fipdpsw.2016.182).
+
+&lt;a name=bib-algebra&gt;&lt;/a&gt;[[Cha+16]](#cite-algebra) J. M. Chappell et al. "The Vector Algebra War: A Historical Perspective". In:
+_IEEE Access_ 4 (2016), p. 1997–2004. DOI: [10.1109/access.2016.2538262](https://doi.org/10.1109%2Faccess.2016.2538262).
+
+&lt;a name=bib-gaudet_maida_2018&gt;&lt;/a&gt;[[GM18]](#cite-gaudet_maida_2018) C. J. Gaudet et al. "Deep Quaternion Networks". In: _2018
+International Joint Conference on Neural Networks (IJCNN)_ (2018). DOI:
+[10.1109/ijcnn.2018.8489651](https://doi.org/10.1109%2Fijcnn.2018.8489651).
+
+&lt;a name=bib-qConv&gt;&lt;/a&gt;[[PML19a]](#cite-qConv) T. Parcollet et al. "Quaternion Convolutional Neural Networks for Heterogeneous
+Image Processing". In: _ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)_
+(2019). DOI: [10.1109/icassp.2019.8682495](https://doi.org/10.1109%2Ficassp.2019.8682495).
+
+&lt;a name=bib-qsurvey&gt;&lt;/a&gt;[[PML19b]](#cite-qsurvey) T. Parcollet et al. "A survey of quaternion neural networks". In: _Artificial
+Intelligence Review_ (2019). DOI: [10.1007/s10462-019-09752-1](https://doi.org/10.1007%2Fs10462-019-09752-1).
+
+
+---
+# Reference II
+&lt;a name=bib-r2h&gt;&lt;/a&gt;[[Par+19]](#cite-r2h) T. Parcollet et al. "Real to H-Space Encoder for Speech Recognition". In: _Interspeech
+2019_ (2019). DOI: [10.21437/interspeech.2019-1539](https://doi.org/10.21437%2Finterspeech.2019-1539).
 
 &lt;a name=bib-nnZoo&gt;&lt;/a&gt;[[Vee19]](#cite-nnZoo) F. v. Veen. _The Neural Network Zoo_. Apr. 2019. URL:
 [https://www.asimovinstitute.org/neural-network-zoo/](https://www.asimovinstitute.org/neural-network-zoo/).
+
+&lt;a name=bib-qConv2&gt;&lt;/a&gt;[[Zhu+18]](#cite-qConv2) X. Zhu et al. "Quaternion Convolutional Neural Networks". In: _Computer Vision –
+ECCV 2018 Lecture Notes in Computer Science_ (2018), p. 645–661. DOI:
+[10.1007/978-3-030-01237-3_39](https://doi.org/10.1007%2F978-3-030-01237-3_39).
 
 
     </textarea>
