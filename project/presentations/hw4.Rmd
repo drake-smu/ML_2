@@ -1,6 +1,6 @@
 ---
-title: "Complex and Hypercomplex Neural Networks"
-subtitle: "ft. Quaternions and friends"
+title: "Hypercomplex Neural Networks"
+subtitle: "ft. Quaternions"
 author: "Carson Drake"
 institute: "SMU DS7335"
 date: "2019/12/01 (updated: `r Sys.Date()`)"
@@ -15,7 +15,8 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-
+class: inverse
+#State of Deep Learning
 ```{r, load_refs, include=FALSE, cache=FALSE}
 library(RefManageR)
 BibOptions(check.entries = FALSE,
@@ -27,12 +28,6 @@ BibOptions(check.entries = FALSE,
            dashed = FALSE)
 myBib <- ReadBib("./bibliography.bib", check = FALSE)
 ```
-
----
-class: inverse
-#State of Deep Learning
-
-
 
 ## Struggles
 
@@ -168,8 +163,7 @@ quaternion multiplication
 
 * Hamilton's work in quaternions was a polarizing topic at the time.  
 Some went as far as to deam them "mixed evil".  
-* However greats such as Maxwell even found them quite elegant and 
-expressive.  
+
 * Josiah Gibbs, introduced his own vector analysis. Greatly recycling the 
 properties of the imaginary vector part, but rather than their components 
 multiplying to -1 they equaled 0;
@@ -248,6 +242,10 @@ Q_{1}\otimes Q_{2} &=\left(r_{1} r_{2}-x_{1} x_{2}-y_{1} y_{2}-z_{1} z_{2}\right
 \end{equation}
 ]
 
+.footnote[
+`r AutoCite(myBib, "qConv")`
+]
+
 ???
 * The Hamilton product (⊗) is used in QNN to remplace the standard real-valued dot
 product, and to perform transforma- tions between two quaternions
@@ -310,18 +308,30 @@ src: `r AutoCite(myBib, "gaudet_maida_2018")`
 f_{t}&=\sigma\left(W_{f} \otimes x_{t}+R_{f} \otimes h_{t-1}+b_{f}\right)\\
 i_{t}&=\sigma\left(W_{i} \otimes x_{t}+R_{i} \otimes h_{t-1}+b_{i}\right)\\ 
 o_{t}&=\sigma\left(W_{o} \otimes x_{t}+R_{o} \otimes h_{t-1}+b_{o}\right)\\  
-c_{t}&=f_{t} \times c_{t-1}+i_{t} \times \alpha\left(W_{c} \otimes x_{t}+R_{c} \otimes h_{t-1}+b_{c}\right)\\
-h_{t}&=o_{t} \times \alpha\left( c_{t} \right)\\
-\\
-\\
+c_{t}&=f_{t} \times c_{t-1}\\
+&{ }+ i_{t} \times \alpha\left(W_{c} \otimes x_{t}+R_{c} \otimes h_{t-1}+b_{c}\right)\\
+h_{t}&=o_{t} \times \alpha\left( c_{t} \right)\end{aligned}
+\end{equation}
+]
+
+.pull-right[
+\begin{equation}
+\begin{aligned}\
 &\text{Real-Valued}\\
 f_{t} &=\sigma_{g}\left(W_{f} x_{t}+U_{f} h_{t-1}+b_{f}\right)\\
 i_{t} &=\sigma_{g}\left(W_{i} x_{t}+U_{i} h_{t-1}+b_{i}\right) \\
 o_{t} &=\sigma_{g}\left(W_{o} x_{t}+U_{o} h_{t-1}+b_{o}\right) \\
-c_{t} &=f_{t} \circ c_{t-1}+i_{t} \circ \sigma_{c}\left(W_{c} x_{t}+U_{c} h_{t-1}+b_{c}\right) \\ 
+c_{t} &=f_{t} \circ c_{t-1}\\
+&+i_{t} \circ \sigma_{c}\left(W_{c} x_{t}+U_{c} h_{t-1}+b_{c}\right) \\ 
 h_{t} &=o_{t} \circ \sigma_{h}\left(c_{t}\right)\end{aligned}
 \end{equation}
+
 ]
+
+.center[
+![:scale 50%](./rsc/diagrams/lstm.png)
+]
+.footnote[`r AutoCite(myBib, "rathor")`]
 
 ???
 
@@ -352,6 +362,7 @@ class: inverse, middle, center
 ---
 # R2H (Real to Quaternion) Layer
 
+
 ![:scale 100%](./rsc/diagrams/r2h.png)
 .footnote[
 `r AutoCite(myBib, "r2h")`
@@ -362,7 +373,19 @@ class: inverse, middle, center
 
 ![:scale 100%](./rsc/diagrams/qlstm_res.png)
 .footnote[
-`r AutoCite(myBib, "r2h")`
+`r AutoCite(myBib, "parcollet_morchid_linares_mori_2019")`
+]
+
+---
+# Speech Recognition Pt. 2
+
+.center[
+
+![:scale 75%](./rsc/diagrams/qlstm_res2.png)
+]
+
+.footnote[
+`r AutoCite(myBib, "parcollet_morchid_linares_mori_2019")`
 ]
 
 ---

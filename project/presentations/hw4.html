@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Complex and Hypercomplex Neural Networks</title>
+    <title>Hypercomplex Neural Networks</title>
     <meta charset="utf-8" />
     <meta name="author" content="Carson Drake" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -13,21 +13,16 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Complex and Hypercomplex Neural Networks
-## ft. Quaternions and friends
+# Hypercomplex Neural Networks
+## ft. Quaternions
 ### Carson Drake
 ### SMU DS7335
 ### 2019/12/01 (updated: 2019-12-14)
 
 ---
 
-
-
-
----
 class: inverse
 #State of Deep Learning
-
 
 
 ## Struggles
@@ -164,8 +159,7 @@ quaternion multiplication
 
 * Hamilton's work in quaternions was a polarizing topic at the time.  
 Some went as far as to deam them "mixed evil".  
-* However greats such as Maxwell even found them quite elegant and 
-expressive.  
+
 * Josiah Gibbs, introduced his own vector analysis. Greatly recycling the 
 properties of the imaginary vector part, but rather than their components 
 multiplying to -1 they equaled 0;
@@ -244,6 +238,10 @@ Q_{1}\otimes Q_{2} &amp;=\left(r_{1} r_{2}-x_{1} x_{2}-y_{1} y_{2}-z_{1} z_{2}\r
 \end{equation}`
 ]
 
+.footnote[
+([Parcollet, et al., 2019](#bib-qConv))
+]
+
 ???
 * The Hamilton product (⊗) is used in QNN to remplace the standard real-valued dot
 product, and to perform transforma- tions between two quaternions
@@ -306,18 +304,30 @@ src: ([Gaudet, et al., 2018](#bib-gaudet_maida_2018))
 f_{t}&amp;=\sigma\left(W_{f} \otimes x_{t}+R_{f} \otimes h_{t-1}+b_{f}\right)\\
 i_{t}&amp;=\sigma\left(W_{i} \otimes x_{t}+R_{i} \otimes h_{t-1}+b_{i}\right)\\ 
 o_{t}&amp;=\sigma\left(W_{o} \otimes x_{t}+R_{o} \otimes h_{t-1}+b_{o}\right)\\  
-c_{t}&amp;=f_{t} \times c_{t-1}+i_{t} \times \alpha\left(W_{c} \otimes x_{t}+R_{c} \otimes h_{t-1}+b_{c}\right)\\
-h_{t}&amp;=o_{t} \times \alpha\left( c_{t} \right)\\
-\\
-\\
+c_{t}&amp;=f_{t} \times c_{t-1}\\
+&amp;{ }+ i_{t} \times \alpha\left(W_{c} \otimes x_{t}+R_{c} \otimes h_{t-1}+b_{c}\right)\\
+h_{t}&amp;=o_{t} \times \alpha\left( c_{t} \right)\end{aligned}
+\end{equation}`
+]
+
+.pull-right[
+`\begin{equation}
+\begin{aligned}\
 &amp;\text{Real-Valued}\\
 f_{t} &amp;=\sigma_{g}\left(W_{f} x_{t}+U_{f} h_{t-1}+b_{f}\right)\\
 i_{t} &amp;=\sigma_{g}\left(W_{i} x_{t}+U_{i} h_{t-1}+b_{i}\right) \\
 o_{t} &amp;=\sigma_{g}\left(W_{o} x_{t}+U_{o} h_{t-1}+b_{o}\right) \\
-c_{t} &amp;=f_{t} \circ c_{t-1}+i_{t} \circ \sigma_{c}\left(W_{c} x_{t}+U_{c} h_{t-1}+b_{c}\right) \\ 
+c_{t} &amp;=f_{t} \circ c_{t-1}\\
+&amp;+i_{t} \circ \sigma_{c}\left(W_{c} x_{t}+U_{c} h_{t-1}+b_{c}\right) \\ 
 h_{t} &amp;=o_{t} \circ \sigma_{h}\left(c_{t}\right)\end{aligned}
 \end{equation}`
+
 ]
+
+.center[
+![:scale 50%](./rsc/diagrams/lstm.png)
+]
+.footnote[([Rathor, 2019](#bib-rathor))]
 
 ???
 
@@ -348,6 +358,7 @@ class: inverse, middle, center
 ---
 # R2H (Real to Quaternion) Layer
 
+
 ![:scale 100%](./rsc/diagrams/r2h.png)
 .footnote[
 ([Parcollet, et al., 2019](#bib-r2h))
@@ -358,7 +369,19 @@ class: inverse, middle, center
 
 ![:scale 100%](./rsc/diagrams/qlstm_res.png)
 .footnote[
-([Parcollet, et al., 2019](#bib-r2h))
+([Parcollet, et al., 2019](#bib-parcollet_morchid_linares_mori_2019))
+]
+
+---
+# Speech Recognition Pt. 2
+
+.center[
+
+![:scale 75%](./rsc/diagrams/qlstm_res2.png)
+]
+
+.footnote[
+([Parcollet, et al., 2019](#bib-parcollet_morchid_linares_mori_2019))
 ]
 
 ---
@@ -398,35 +421,44 @@ class: inverse, middle, center
 # References
 
 
-&lt;a name=bib-conv_real&gt;&lt;/a&gt;[[Bot+16]](#cite-conv_real) J. Bottleson et al. "clCaffe: OpenCL Accelerated Caffe for Convolutional
-Neural Networks". In: _2016 IEEE International Parallel and Distributed Processing Symposium Workshops (IPDPSW)_ (2016). DOI:
-[10.1109/ipdpsw.2016.182](https://doi.org/10.1109%2Fipdpsw.2016.182).
+&lt;a name=bib-conv_real&gt;&lt;/a&gt;[[Bot+16]](#cite-conv_real) J. Bottleson et al. "clCaffe: OpenCL Accelerated Caffe for
+Convolutional Neural Networks". In: _2016 IEEE International Parallel and Distributed Processing Symposium Workshops
+(IPDPSW)_ (2016). DOI: [10.1109/ipdpsw.2016.182](https://doi.org/10.1109%2Fipdpsw.2016.182).
 
-&lt;a name=bib-algebra&gt;&lt;/a&gt;[[Cha+16]](#cite-algebra) J. M. Chappell et al. "The Vector Algebra War: A Historical Perspective". In:
-_IEEE Access_ 4 (2016), p. 1997–2004. DOI: [10.1109/access.2016.2538262](https://doi.org/10.1109%2Faccess.2016.2538262).
+&lt;a name=bib-algebra&gt;&lt;/a&gt;[[Cha+16]](#cite-algebra) J. M. Chappell et al. "The Vector Algebra War: A Historical Perspective".
+In: _IEEE Access_ 4 (2016), p. 1997–2004. DOI:
+[10.1109/access.2016.2538262](https://doi.org/10.1109%2Faccess.2016.2538262).
 
-&lt;a name=bib-gaudet_maida_2018&gt;&lt;/a&gt;[[GM18]](#cite-gaudet_maida_2018) C. J. Gaudet et al. "Deep Quaternion Networks". In: _2018
-International Joint Conference on Neural Networks (IJCNN)_ (2018). DOI:
+&lt;a name=bib-gaudet_maida_2018&gt;&lt;/a&gt;[[GM18]](#cite-gaudet_maida_2018) C. J. Gaudet et al. "Deep Quaternion Networks". In:
+_2018 International Joint Conference on Neural Networks (IJCNN)_ (2018). DOI:
 [10.1109/ijcnn.2018.8489651](https://doi.org/10.1109%2Fijcnn.2018.8489651).
 
-&lt;a name=bib-qConv&gt;&lt;/a&gt;[[PML19a]](#cite-qConv) T. Parcollet et al. "Quaternion Convolutional Neural Networks for Heterogeneous
-Image Processing". In: _ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)_
-(2019). DOI: [10.1109/icassp.2019.8682495](https://doi.org/10.1109%2Ficassp.2019.8682495).
+&lt;a name=bib-qConv&gt;&lt;/a&gt;[[PML19a]](#cite-qConv) T. Parcollet et al. "Quaternion Convolutional Neural Networks for
+Heterogeneous Image Processing". In: _ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal
+Processing (ICASSP)_ (2019). DOI: [10.1109/icassp.2019.8682495](https://doi.org/10.1109%2Ficassp.2019.8682495).
 
-&lt;a name=bib-qsurvey&gt;&lt;/a&gt;[[PML19b]](#cite-qsurvey) T. Parcollet et al. "A survey of quaternion neural networks". In: _Artificial
-Intelligence Review_ (2019). DOI: [10.1007/s10462-019-09752-1](https://doi.org/10.1007%2Fs10462-019-09752-1).
+&lt;a name=bib-qsurvey&gt;&lt;/a&gt;[[PML19b]](#cite-qsurvey) T. Parcollet et al. "A survey of quaternion neural networks". In:
+_Artificial Intelligence Review_ (2019). DOI: [10.1007/s10462-019-09752-1](https://doi.org/10.1007%2Fs10462-019-09752-1).
 
 
 ---
 # Reference II
-&lt;a name=bib-r2h&gt;&lt;/a&gt;[[Par+19]](#cite-r2h) T. Parcollet et al. "Real to H-Space Encoder for Speech Recognition". In: _Interspeech
-2019_ (2019). DOI: [10.21437/interspeech.2019-1539](https://doi.org/10.21437%2Finterspeech.2019-1539).
+&lt;a name=bib-parcollet_morchid_linares_mori_2019&gt;&lt;/a&gt;[[Par+19a]](#cite-parcollet_morchid_linares_mori_2019) T. Parcollet et
+al. "Bidirectional Quaternion Long Short-term Memory Recurrent Neural Networks for Speech Recognition". In: _ICASSP 2019 -
+2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)_ (2019). DOI:
+[10.1109/icassp.2019.8683583](https://doi.org/10.1109%2Ficassp.2019.8683583).
+
+&lt;a name=bib-r2h&gt;&lt;/a&gt;[[Par+19b]](#cite-r2h) T. Parcollet et al. "Real to H-Space Encoder for Speech Recognition". In:
+_Interspeech 2019_ (2019). DOI: [10.21437/interspeech.2019-1539](https://doi.org/10.21437%2Finterspeech.2019-1539).
+
+&lt;a name=bib-rathor&gt;&lt;/a&gt;[[Rat19]](#cite-rathor) S. Rathor. _https://medium.com/@saurabh.rathor092/_. 2019. URL:
+[https://miro.medium.com/max/862/1*GSZ0ZQZPvcWmTVatAeOiIw.png](https://miro.medium.com/max/862/1*GSZ0ZQZPvcWmTVatAeOiIw.png).
 
 &lt;a name=bib-nnZoo&gt;&lt;/a&gt;[[Vee19]](#cite-nnZoo) F. v. Veen. _The Neural Network Zoo_. Apr. 2019. URL:
 [https://www.asimovinstitute.org/neural-network-zoo/](https://www.asimovinstitute.org/neural-network-zoo/).
 
-&lt;a name=bib-qConv2&gt;&lt;/a&gt;[[Zhu+18]](#cite-qConv2) X. Zhu et al. "Quaternion Convolutional Neural Networks". In: _Computer Vision –
-ECCV 2018 Lecture Notes in Computer Science_ (2018), p. 645–661. DOI:
+&lt;a name=bib-qConv2&gt;&lt;/a&gt;[[Zhu+18]](#cite-qConv2) X. Zhu et al. "Quaternion Convolutional Neural Networks". In: _Computer
+Vision – ECCV 2018 Lecture Notes in Computer Science_ (2018), p. 645–661. DOI:
 [10.1007/978-3-030-01237-3_39](https://doi.org/10.1007%2F978-3-030-01237-3_39).
 
 
