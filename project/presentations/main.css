@@ -10,3 +10,32 @@
 .history li{
 	font-size:30px;
 }
+.biggerer li{
+	font-size:28px;
+}
+
+.bigger li{
+	font-size:25px;
+}
+
+.demo p{
+	margin-block-start: 0.1em!important;
+	margin-block-end: 0.1em!important;
+	line-height: 1;
+}
+
+.blue{
+	color: darkblue;
+}
+.red{
+	color: darkred;
+}
+
+.caption {
+  font-size: 0.8em;
+  font-style: italic;
+  color: dark grey;
+  margin-right: 10%;
+  margin-left: 10%;  
+  text-align: justify;
+}

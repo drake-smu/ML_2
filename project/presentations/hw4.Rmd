@@ -1,8 +1,7 @@
 ---
 title: "Hypercomplex Neural Networks"
-subtitle: "ft. Quaternions"
+subtitle: "Quaternion Edition"
 author: "Carson Drake"
-institute: "SMU DS7335"
 date: "2019/12/01 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
@@ -20,13 +19,19 @@ class: inverse
 ```{r, load_refs, include=FALSE, cache=FALSE}
 library(RefManageR)
 BibOptions(check.entries = FALSE,
-           bib.style = "alphabetic",
+           bib.style = "authortitle",
            cite.style = 'authortitle',
            max.names= 1,
+           sorting = 'nyvt',
            style = "markdown",
            hyperlink = TRUE,
            dashed = FALSE)
 myBib <- ReadBib("./bibliography.bib", check = FALSE)
+
+citeMe <- function(ref){
+  AutoCite(myBib, ref)
+}
+
 ```
 
 ## Struggles
@@ -63,7 +68,7 @@ learning
 .pull-right[
 ![](https://imgs.xkcd.com/comics/machine_learning.png)
 
-.footnote[image src: [xkcd](https://xkcd.com/1838/)]
+.footnote[image source: [xkcd.com/1838](https://xkcd.com/1838/)]
 ]
 
 ---
@@ -111,7 +116,9 @@ related to mainstream algebra as well as vectors and vector space.
 background-image:url(./rsc/memes/quaternions.jpg)
 class: inverse
 
-.footnote[src: [https://makeameme.org/meme/quaternions]()]
+.footnote[
+source: [https://makeameme.org/meme/quaternions]()
+]
 
 ???
 QUATERNIONS!
@@ -203,18 +210,19 @@ k i &=-i k=j \end{aligned}
 .footnote[
 .right[
 <!--top: [By Maschen - Own work, CC BY-SA 3.0](https://commons.wikimedia.org/w/index.php?curid=27793856-->
-img: [By Cayley_graph_Q8.png: Sullivan.t.j.Original uploader was Sullivan.t.j at en.wikipediaderivative CC BY-SA 3.0](https://commons.wikimedia.org/w/index.php?curid=16302914)
+image source: [By Cayley_graph_Q8.png: Sullivan.t.j.Original uploader was Sullivan.t.j at en.wikipediaderivative CC BY-SA 3.0](https://commons.wikimedia.org/w/index.php?curid=16302914)
 ]]
 ]
 
 ???
 * The "redundancy" Gibbs did away with is in fact the part of quaternions 
 that make them appealing today.
-* Non commuting means that the order operating is important. This makes them 
-very useful for calculating spacial position and roations in 3-D. Try putting you phone down on a surface.  
+* Non commuting means that the order operating is important. This makes them
+very useful for calculating spacial position and roations in 3-D. Try putting
+you phone down on a surface.
 Flip it over (away from you)  
 rotate it 90 degrees.  
-Note the potion.  
+Note the position.  
 Now begin in the same start position but this time rotate 90, then flip over its end.  
 You should find it face down but oriented the opposite direction.
 * This is related to double cover. In 3D space, a quaternion performs 2 full rotations 
@@ -225,6 +233,40 @@ to complete 1 full 4d rotation.
 class: inverse, middle, center
 # Quaternion Valued <br/>Neural Networks
 
+---
+# QNN Concepts
+
+.pull-left.biggerer.blue[
+  
+  ## We will cover...
+  * Hamilton Product
+  * Activation Functions
+  * Loss functions
+
+]
+
+.pull-right.biggerer[ 
+  .red[
+  ## We will not cover...
+  * Batch Normalization
+  * Weight Initialization
+  * Backpropagation and Chain Rule  
+  ]
+  
+]
+<br><br>
+
+.biggerer[
+###.red[**"Will not cover"**] $\bf\neq$ **"Not important"**
+ **These "Will Not Cover" concepts are actually quite important.  
+ *HIGHLY RECOMMEND READING* SECTIONS DESCRIBING THESE CONCEPTS IN  
+ `r citeMe("gaudet_maida_2018")` and `r citeMe("qsurvey")`**
+]
+
+???
+@TODO
+ however given that slide presentations are ill suited for conveying extensive mathematical 
+ derivatives and nuances of group theory, I am going to point 
 
 ---
 #Hamilton Product
@@ -243,7 +285,7 @@ Q_{1}\otimes Q_{2} &=\left(r_{1} r_{2}-x_{1} x_{2}-y_{1} y_{2}-z_{1} z_{2}\right
 ]
 
 .footnote[
-`r AutoCite(myBib, "qConv")`
+source: `r AutoCite(myBib, "qConv")`
 ]
 
 ???
@@ -255,24 +297,104 @@ components are shared through multiple quaternion-input parts during the
 Hamilton product , creating relations within the elements.
 
 ---
+#  Activation Function
+
+.pull-left[
+## Quaternion Functions
+
+* Promising Results
+* Singularities
+* Complicate Training
+
+\begin{equation}
+\small
+\operatorname{sig}(Q)=\frac{1}{1+e^{-Q}}, \quad \tanh (Q)=\frac{e^{2 Q}-1}{e^{2 Q}+1}\\
+\small
+e^{Q}=e^{s}\left(\cos |\vec{v}|+\frac{\vec{v}}{|\vec{v}|} \sin |\vec{v}|\right)
+\end{equation}
+]
+
+.pull-right[
+## Split Activation
+
+* Component wise activation
+* Simplify Training
+* Real-value Functions (tanh, sigmoid, etc)
+
+
+\begin{equation}
+\small
+\alpha(Q)=f(r)+f(x) \mathbf{i}+f(y) \mathbf{j}+f(z) \mathbf{k}
+\end{equation}
+]
+???
+There are fully quaternion activation functions, such the hypercomplex sigmoid
+or the hyperbolic tangent. Though these quaternion-valued activation functions
+show promising results, they require careful training due to an important number
+of singularities that can drastically alter the QNN performances.
+
+* The more common, solution is the split activation function. Split Activstion
+ functions apply real-valued activation functions componentwise. 
+ 
+* Split activation functions map quaternion numbers back to the real-valued
+space by ignoring the nature of the relation that exists between the components
+* Multi-view learning ability of the QNN is reduced by the fact that this
+relation is captured by the Hamilton product
+
+---
+# Loss Function (Back propagation)
+
+.pull-left[
+## Split Loss Function
+* Similar to Split Activation
+* Quaternion Mean Square Error
+]
+
+.pull-right[
+## Compromise
+* Hybrid Model
+* QLoss Function Unsolved
+* Probability distribution issue
+]
+
+\begin{equation}
+\small
+E=\frac{1}{N} \sum_{n=1}^{N}\left[\left(t_{r p n}-S_{r n}^{M}\right)^{2}+\left(t_{i p n}-S_{i n}^{M}\right)^{2}+\left(t_{j p n}-S_{j n}^{M}\right)^{2}+\left(t_{k p n}-S_{k n}^{M}\right)^{2}\right]
+\end{equation}
+\begin{equation}
+\small
+\Delta^{l}=\frac{\partial E}{\partial W^{l}}=\frac{\partial E}{\partial W_{r}^{l}}+\mathrm{i} \frac{\partial E}{\partial W_{i}^{l}}+\mathbf{j} \frac{\partial E}{\partial W_{j}^{l}}+\mathbf{k} \frac{\partial E}{\partial W_{k}^{l}}
+\end{equation}
+
+???
+* The definition of quaternion loss functions mostly remain an unsolved problem
+* Quaternion probability distribution is not trivial, this commonly results in the 
+usage of a real-valued final layer for learning classification tasks.
+* An extension of the mean squared error to quaternions for approximation tasks 
+was introduced by solely replacing real-numbers with hyper-complex numbers
+* The QMSE is a split loss function based on the standard MSE. 
+* The lack of cost functions based purely on quaternion algebra technically makes
+quaternion neural networks hybrid models.
+
+---
 background-image: url(./rsc/real_conv2.png)
 background-size: contain
 # CNN vs QCNN (Real)
 
 
 .footnote[
-src: `r AutoCite(myBib, "qConv2")`
+source: `r AutoCite(myBib, "qConv2")`
 ]
 
 ???
-in the specific case of image recognition, a good model has to efficiently
+
+* In regards to image recognition, a good model has to efficiently
 encode local relations within the input features, such as between the Red,
 Green, and Blue (R,G,B) channels of a single pixel, as well as structural
 relations  
 
-Traditional real-valued CNNs consider pixels as three different and separated
-values (R, G, B), while a more natural representation is to process a pixel as a
-single multi- dimensional entity
+* Traditional real-valued CNNs consider pixels as three different and separated
+values (R, G, B)
 
 ---
 background-image: url(./rsc/q_conv2.png)
@@ -282,19 +404,33 @@ background-size: contain
 
 
 .footnote[
-src: `r AutoCite(myBib, "qConv2")`
+source: `r AutoCite(myBib, "qConv2")`
 ]
+
+???
+*  a more natural representation is to process a pixel as a
+single multi- dimensional entity
 
 ---
 background-image: url(/rsc/diagrams/conv_q.png)
 background-size: contain
-# CNN vs QCNN (Quaternion)
+# CNN vs QCNN (Hamilton Product)
 
 
 
 .footnote[
-src: `r AutoCite(myBib, "gaudet_maida_2018")`
+source: `r AutoCite(myBib, "gaudet_maida_2018")`
 ]
+
+???
+This diagram from Gaudet, et al's paper, exploring the same concept of QCNN's, 
+helps illustrate the weight to input interaction that occurs with the Hamilton 
+Product.  
+
+As we can see, the rijk components interact across all input components. 
+This is where the local intra pixel color to color relations are learned.  
+
+This cross component interaction is not present in typical CNN's
 
 ---
 # LSTM vs QLSTM
@@ -331,50 +467,55 @@ h_{t} &=o_{t} \circ \sigma_{h}\left(c_{t}\right)\end{aligned}
 .center[
 ![:scale 50%](./rsc/diagrams/lstm.png)
 ]
-.footnote[`r AutoCite(myBib, "rathor")`]
+
+.caption.center[LSTM cell]
+
+.footnote[
+source: `r AutoCite(myBib, "rathor")`
+]
 
 ???
 
-1. Activation functions in the quaternion domain.
-2. Dedicated parameters initialization.
-3. Quaternion-valued Backpropagation Through Time (QBPTT)
+QRNNs are expected to code both sequential dependencies due to the recurrent
+architecture and internal relations between multi-dimensional input features
+that compose the sequence due to the Hamilton product.
 
+Comparing the set of equations used in the respective networks we can see that 
+the underlying structure is largely identical. The main exception being in the 
+QLSTM's use of split functions (represented by alpha), which we previously discussed.  
 
 ---
 class: inverse, middle, center
 # QNN Research<br/>Examples
 
----
-# Parcollet, Morchid, and Linarès et al.
-
-## Recent Papers
-
-* Real to H-Space Encoder for Speech Recognition [https://arxiv.org/pdf/1906.08043.pdf]()
-* Quaternion Convolutional Neural Networds for Heterogeneus Image Processing 
-[https://arxiv.org/pdf/1811.02656.pdf]()
-
-## Other
-
-* Github Repo [Orkis-Research](https://github.com/Orkis-Research)
-* A survey of quaternion neural networks [Artificial Intelligence Review](https://doi.org/10.1007/s10462-019-09752-1)
-
-
----
-# R2H (Real to Quaternion) Layer
-
-
-![:scale 100%](./rsc/diagrams/r2h.png)
-.footnote[
-`r AutoCite(myBib, "r2h")`
-]
 
 ---
 # Speech Recognition
 
 ![:scale 100%](./rsc/diagrams/qlstm_res.png)
+
+.caption.center[Phoneme Error Rate (PER)%]
+
 .footnote[
-`r AutoCite(myBib, "parcollet_morchid_linares_mori_2019")`
+source: `r AutoCite(myBib, "parcollet_morchid_linares_mori_2019")`
 ]
+
+???
+The first QNN examples I want to walk through is the QLSTM and QRNN. The raw
+audio is first transformed into 40-dimensional log Mel-filter-bank coefficients.  
+
+
+Q(f, t) representsan acoustic quaternion multiple views of a frequency f at time
+frame t, consisting of the energy e(f, t) in the filter band at frequency f, its
+first time derivative describing a slope view, its second time derivative
+describing a concavity view, and the third derivative describing the rate of
+change of the second derivative
+
+The reported results support the initial intuitions by showing that QLSTM are
+more effective at learning both longer dependencies and a compact representation
+of multidimensional acoustic speech features by outperforming standard
+real-valued LSTMs on both experiments, with up to 2.8 times less neural
+parameters
 
 ---
 # Speech Recognition Pt. 2
@@ -384,9 +525,24 @@ class: inverse, middle, center
 ![:scale 75%](./rsc/diagrams/qlstm_res2.png)
 ]
 
-.footnote[
-`r AutoCite(myBib, "parcollet_morchid_linares_mori_2019")`
+.caption.center[
+Cross entropy loss, and accuracy  
+QLSTM (Blue) and LSTM (Orange)
 ]
+
+
+.footnote[
+
+source: `r citeMe("parcollet_morchid_linares_mori_2019")`
+]
+
+???
+To verify that the quaternion algebra was not imparing the network functionality
+of an LSTM, Parcollet performed a synthetic memory copy-task for time lags of
+blanks T of 10, 50, and 100. From the Evolution of the cross entropy loss, and
+of the accuracy of QLSTM (Blue curves) and LSTM (Orange curves) we see that not
+only does the QLSTM converge faster than the real-value counter part, it also
+manages to converge at 100 lag where the real value LSTM fails.
 
 ---
 # Heterogeneous Image Processing
@@ -395,7 +551,7 @@ class: inverse, middle, center
 
 ![:scale 100%](./rsc/diagrams/results_QCAE.png)
 .footnote[
-`r AutoCite(myBib, "qConv")`
+source: `r AutoCite(myBib, "qConv")`
 ]
 
 ???
@@ -416,8 +572,158 @@ QCAE produced better quality reconstructions with respect to the PSNR and SSIM m
 than CAE, even with considering the unability of CAE to learn colors
 
 ---
-class: inverse, middle, center
-# Going Forward...
+# Replicated QCAE
 
-```{r child = '_000.Rmd'}
+
+.pull-left.small.demo[
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**QCAE**&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **CAE**  
+![:scale 30%](./rsc/save_image_QCAE_0.png) 
+![:scale 30%](./rsc/save_image_CAE_0.png) 
+
+![:scale 30%](./rsc/save_image_QCAE_100.png)
+![:scale 30%](./rsc/save_image_CAE_100.png)  
+
+![:scale 30%](./rsc/save_image_QCAE_3000.png)
+![:scale 30%](./rsc/save_image_CAE_3000.png)
+]
+
+.pull-right.history[
+## Results
+* Confirmation QCAE learned full color space
+* CAE failed to learn colors
+* More accurate overall reconstruction
+
+## Implications
+* Limited training data
+* Better generalization
+* Help counter biases
+]
+
+???
+Given the findings described in the heterogeneous autoencoder paper, I had to
+see it to believe it. Fortunately Parcollet's code is publically avaibale. After
+forking and following the brief setup I was able to accurately replicate the
+findings described in the paper. Full disclosure I haven't fully verified the
+full quaternion implementation used, but I did alter the images used for
+training, testing, and verification and found that the model performed
+consistently.
+
+I hope to dig deeper into the code implementation, and possiby evaluate different 
+classification models utilizing the QCAE embedding with biased training data.
+
+---
+# R2H (Real to Quaternion) Layer
+
+
+![:scale 100%](./rsc/diagrams/r2h.png)
+.footnote[
+source: `r AutoCite(myBib, "r2h")`
+]
+
+???
+R2H is a very important step towards seamlessly integrating hypercomplex
+networks into hybrid real-quaternion valued models. One of the biggest hurtles
+for implementing QNN's is the added work needed to transform real value data to
+quaternion inputs.
+
+There are various combinations that can be made for different dimentional data.
+For instance it may be better to use two input quaternions with one consisting
+of ijk components and the other of only r. A conversion layer such as R2H can
+establish the optimal representation automatically.
+
+
+---
+class: inverse, middle, center
+# Closing...
+
+
+---
+# Closing...
+
+.pull-left.bigger[
+## Recap
+* Robust Compact Representations
+* Consistently outperform equivalent Real-Valued NN
+* Core basic NN functions have been implemented. More research needed
+* Learn local and global relationships in higher dimentional data
+]
+
+.pull-right.bigger[
+## Going Forward
+* Quaternion-valued Features
+* New Learning Algorithms
+* New Architectures
+* Proper CUDA Implementation
+]
+
+???
+<!--Recap-->
+* The specific four dimensional algebra of quaternion numbers, including the
+Hamilton product allows quaternion-valued models to consistently outperform
+equivalent real-valued neural networks
+
+* QNNs suffer from the fact of being a resurgent field
+
+<!--Going Forward-->
+* Currently, most features used in quaternion-valued models are straightforward 
+or commons real-valued features. New data preprocessing methods have to be
+investigated to naturally project the features into the quaternion space, such
+as the quaternion Fourier transform
+
+* Current QNN architectures are based on the straight forward extension of the
+real-valued backpropagation to the quaternion domain. $G\mathbb{HR}$ calculus
+makes it possible to propose well adapted learning algorithms that can speed-up
+the training, and increase the performances due to a better consideration of the
+quaternion algebra.
+
+* New neural networks architectures,such as capsule networks, or generative
+adversarial neural networks which could benefits from the introduction of
+quaternion numbers, are still missing.
+
+* The Hamilton Product is a computationally expensive operation. Thought current
+model sizes of QNN are more compact than their real-valued equivalent, their
+training times are distinctly worse.
+
+---
+# Credit : Parcollet, et al
+
+## Recent Papers
+
+* Real to H-Space Encoder for Speech Recognition [https://arxiv.org/pdf/1906.08043.pdf]()
+* Quaternion Convolutional Neural Networds for Heterogeneus Image Processing 
+[https://arxiv.org/pdf/1811.02656.pdf]()
+
+## Other
+
+* Github Repo [Orkis-Research](https://github.com/Orkis-Research)
+* A survey of quaternion neural networks [Artificial Intelligence Review](https://doi.org/10.1007/s10462-019-09752-1)
+
+.footnote[
+Parcollet's website: [http://darnault-parcollet.fr/Parcollet]()
+]
+
+???
+Parcollet dedicated his PhD thesis to the investigation and development of  
+hypercomplex neural networks.   
+
+As much as I'd like to walk you through all of his related works, I'm afraid we 
+only have time to highlight some of them. Below is a link to his personal site where 
+you can find all of his papers and ongoing research.
+
+---
+# References
+
+```{r refs, echo=FALSE, results="asis"}
+PrintBibliography(myBib,start=1, end=5)
+# print(myBib[1:5],.opts = list(style = "html", bib.style="numeric"))
+
+```
+
+
+---
+# References II
+```{r refs2, echo=FALSE, results="asis"}
+PrintBibliography(myBib,start = 6, end = 8)
+# print(myBib[6:8],.opts = list(style = "html", bib.style="numeric"))
+
 ```
